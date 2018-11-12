@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="song"
+            type="com.acrcloud.ui.RenameMusicViewModel.Song" />
+
+        <variable
+            name="listener"
+            type="com.acrcloud.ui.SongItemListener" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{ () -> listener.click(song)}">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{song.title}"/>
+    </RelativeLayout>
+</layout>

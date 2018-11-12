@@ -115,10 +115,10 @@ public class ACRCloudRecognizer {
 
     /**
       *
-      *  recognize by file path of (Audio/Video file)
+      *  recognize by file songPath of (Audio/Video file)
       *          Audio: mp3, mp4, wav, m4a, aac, amr, ape, flv, flac, ogg, wma, caf, alac
       *
-      *  @param filePath query file path
+      *  @param filePath query file songPath
       *  @param startSeconds skip (startSeconds) seconds from from the beginning of (filePath)
       *  
       *  @return result 
