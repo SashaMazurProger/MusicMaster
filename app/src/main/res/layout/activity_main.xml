@@ -10,7 +10,7 @@
 
         <variable
             name="viewModel"
-            type="com.acrcloud.ui.RenameMusicViewModel" />
+            type="com.sashamprog.ui.RenameMusicViewModel" />
 
     </data>
 

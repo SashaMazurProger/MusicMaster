@@ -6,11 +6,11 @@
 
         <variable
             name="song"
-            type="com.acrcloud.ui.RenameMusicViewModel.Song" />
+            type="com.sashamprog.ui.RenameMusicViewModel.Song" />
 
         <variable
             name="listener"
-            type="com.acrcloud.ui.SongItemListener" />
+            type="com.sashamprog.ui.SongItemListener" />
 
     </data>
 

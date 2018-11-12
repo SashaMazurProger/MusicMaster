@@ -1,4 +1,4 @@
-package com.acrcloud.ui;
+package com.sashamprog.ui;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

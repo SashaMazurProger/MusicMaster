@@ -1,4 +1,4 @@
-package com.acrcloud.ui;
+package com.sashamprog.ui;
 
 import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableArrayList;
@@ -6,7 +6,7 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Environment;
 
-import com.acrcloud.utils.ACRCloudRecognizer;
+import com.sashamprog.utils.ACRCloudRecognizer;
 
 import java.io.File;
 import java.util.HashMap;
