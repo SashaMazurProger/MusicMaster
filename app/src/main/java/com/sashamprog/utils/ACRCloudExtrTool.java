@@ -47,6 +47,7 @@ ACRCloudExtrTool Copyright 2015 ACRCloud v1.0.0
          set debug, and print all info.
 
 */
+@SuppressWarnings("ALL")
 public class ACRCloudExtrTool {
 
     static {

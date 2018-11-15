@@ -10,7 +10,14 @@ import com.sashamprog.utils.ACRCloudRecognizer;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 public class RenameMusicViewModel extends ViewModel {
 
@@ -32,7 +39,35 @@ public class RenameMusicViewModel extends ViewModel {
 
     public void search(Song song) {
         this.songPath.set(song.title);
-        new RecThread().start();
+        //new RecThread().start();
+        Observable.fromCallable(() -> {
+            loading.set(true);
+
+            Map<String, Object> config = new HashMap<String, Object>();
+            config.put("access_key", "37a24216f7bdbfd272dab7035927e4cd");
+            config.put("access_secret", "pfVkL0Vg4frc3Wk92qoqvfGgT8u5nQLLuS3AfHNK");
+            config.put("host", "identify-eu-west-1.acrcloud.com");
+            config.put("debug", false);
+            config.put("timeout", 5);
+
+            MusicRecognizer re = new MusicRecognizer(config);
+            String resultStr = re.recognizeByFile(songPath.get(), 10);
+
+            loading.set(false);
+            return resultStr;
+        })
+                .map(s -> {
+//                    return new RecognizeResponse();
+                    return s;
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(recognizeResponse -> {
+                            result.set(recognizeResponse);
+                        },
+                        throwable -> {
+
+                        });
     }
 
     public class Song {
@@ -48,21 +83,18 @@ public class RenameMusicViewModel extends ViewModel {
 
         public void run() {
             loading.set(true);
+
             Map<String, Object> config = new HashMap<String, Object>();
-            // Replace "xxxxxxxx" below with your project's host, access_key and access_secret.
             config.put("access_key", "37a24216f7bdbfd272dab7035927e4cd");
             config.put("access_secret", "pfVkL0Vg4frc3Wk92qoqvfGgT8u5nQLLuS3AfHNK");
             config.put("host", "identify-eu-west-1.acrcloud.com");
             config.put("debug", false);
             config.put("timeout", 5);
 
-            ACRCloudRecognizer re = new ACRCloudRecognizer(config);
+            //ACRCloudRecognizer re = new ACRCloudRecognizer(config);
+            MusicRecognizer re = new MusicRecognizer(config);
             String resultStr = re.recognizeByFile(songPath.get(), 10);
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
             loading.set(false);
             result.set(resultStr);
         }
