@@ -1,11 +1,11 @@
-package com.sashamprog.ui;
+package com.acrcloud.ui;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.sashamprog.ui.databinding.SongItemLayoutBinding;
+import com.acrcloud.ui.databinding.SongItemLayoutBinding;
 
 import java.util.ArrayList;
 import java.util.List;

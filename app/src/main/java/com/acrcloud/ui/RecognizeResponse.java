@@ -1,4 +1,4 @@
-package com.sashamprog.ui;
+package com.acrcloud.ui;
 
 import com.google.gson.annotations.SerializedName;
 

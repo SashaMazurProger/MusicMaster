@@ -1,4 +1,4 @@
-package com.sashamprog.ui;
+package com.acrcloud.ui;
 
 import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableArrayList;
@@ -6,17 +6,14 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Environment;
 
-import com.sashamprog.utils.ACRCloudRecognizer;
+import com.acrcloud.utils.ACRCloudRecognizer;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class RenameMusicViewModel extends ViewModel {
@@ -50,7 +47,7 @@ public class RenameMusicViewModel extends ViewModel {
             config.put("debug", false);
             config.put("timeout", 5);
 
-            MusicRecognizer re = new MusicRecognizer(config);
+            ACRCloudRecognizer re = new ACRCloudRecognizer(config);
             String resultStr = re.recognizeByFile(songPath.get(), 10);
 
             loading.set(false);

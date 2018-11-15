@@ -1,4 +1,4 @@
-package com.sashamprog.ui;
+package com.acrcloud.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.BindingAdapter;
@@ -11,7 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.sashamprog.ui.databinding.ActivityMainBinding;
+import com.acrcloud.ui.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 

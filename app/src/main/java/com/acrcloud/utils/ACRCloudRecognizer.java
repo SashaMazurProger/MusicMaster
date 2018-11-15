@@ -14,7 +14,7 @@ This module can recognize ACRCloud by most of audio/video file.
         Video: mp4, mkv, wmv, flv, ts, avi ...
 */
 
-package com.sashamprog.utils;
+package com.acrcloud.utils;
 
 import android.util.Base64;
 

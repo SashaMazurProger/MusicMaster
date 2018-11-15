@@ -7,22 +7,20 @@
 /*
 Copyright 2015 ACRCloud Recognizer v1.0.0
 
-This module can recognize ACRCloud by most of audio/video file. 
+This module can recognize ACRCloud by most of audio/video file.
         Audio: mp3, wav, m4a, flac, aac, amr, ape, ogg ...
         Video: mp4, mkv, wmv, flv, ts, avi ...
 */
 
-package com.sashamprog.ui;
+package com.acrcloud.ui;
 
-import android.os.Looper;
 import android.util.Base64;
 import android.util.Log;
 
 import com.acrcloud.rec.engine.ACRCloudRecognizeEngine;
 import com.acrcloud.rec.sdk.ACRCloudClient;
 import com.acrcloud.rec.sdk.ACRCloudConfig;
-import com.acrcloud.rec.sdk.recognizer.ACRCloudRecognizerBothImpl;
-import com.sashamprog.utils.ACRCloudExtrTool;
+import com.acrcloud.utils.ACRCloudExtrTool;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,12 +41,7 @@ import java.util.Map;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import retrofit2.Call;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.POST;
-import retrofit2.http.QueryMap;
+
 
 public class MusicRecognizer {
 
@@ -227,26 +220,26 @@ public class MusicRecognizer {
         postParams.put("data_type", dataType);
         postParams.put("signature_version", sigVersion);
 
-        Retrofit.Builder builder = new Retrofit.Builder();
-        builder.baseUrl("http://ap-southeast-1.api.acrcloud.com");
-        builder.addConverterFactory(GsonConverterFactory.create());
-
-        ACRService acrService = builder.build().create(ACRService.class);
-        Call<RecognizeResponse> response = acrService.get(postParams);
-        try {
-            RecognizeResponse recognizeResponse = response.execute().body();
-            String code = recognizeResponse.status.code;
-            return code;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        Retrofit.Builder builder = new Retrofit.Builder();
+//        builder.baseUrl("http://ap-southeast-1.api.acrcloud.com");
+//        builder.addConverterFactory(GsonConverterFactory.create());
+//
+//        ACRService acrService = builder.build().create(ACRService.class);
+//        Call<RecognizeResponse> response = acrService.get(postParams);
+//        try {
+//            RecognizeResponse recognizeResponse = response.execute().body();
+//            String code = recognizeResponse.status.code;
+//            return code;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         return "";
     }
 
     interface ACRService {
 
-        @POST("/v1/identify")
-        Call<RecognizeResponse> get(@QueryMap Map<String, Object> map);
+//        @POST("/v1/identify")
+//        Call<RecognizeResponse> get(@QueryMap Map<String, Object> map);
     }
 
     private String doRecogize(byte[] fp) {
