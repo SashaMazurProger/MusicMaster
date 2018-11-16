@@ -30,47 +30,52 @@ public class RenameMusicViewModel extends ViewModel {
         File folder = new File(folderPath.get());
         for (File file : folder.listFiles()) {
             if (isMusicFile(file.getAbsolutePath())) {
-                songs.add(new Song(file.getName(), path));
+                songs.add(new Song(file.getName(), file.getAbsolutePath()));
             }
         }
     }
 
     //mp3, mp4, wav, m4a, aac, amr, ape, flv, flac, ogg, wma, caf, alac
     private boolean isMusicFile(String absolutePath) {
-        return absolutePath.endsWith(".mp3")
-                || absolutePath.endsWith(".mp4")
-                || absolutePath.endsWith(".wav")
-                || absolutePath.endsWith(".m4a")
-                || absolutePath.endsWith(".aac")
-                || absolutePath.endsWith(".amr")
-                || absolutePath.endsWith(".ape")
-                || absolutePath.endsWith(".flv")
-                || absolutePath.endsWith(".flac")
-                || absolutePath.endsWith(".ogg")
-                || absolutePath.endsWith(".wma")
-                || absolutePath.endsWith(".caf")
-                || absolutePath.endsWith(".alac");
+        return absolutePath.endsWith(".mp3") || absolutePath.endsWith(".mp4") || absolutePath.endsWith(".wav") || absolutePath.endsWith(".m4a") || absolutePath.endsWith(".aac") || absolutePath.endsWith(".amr") || absolutePath.endsWith(".ape") || absolutePath.endsWith(".flv") || absolutePath.endsWith(".flac") || absolutePath.endsWith(".ogg") || absolutePath.endsWith(".wma") || absolutePath.endsWith(".caf") || absolutePath.endsWith(".alac");
     }
 
     public void search(Song song) {
-        this.songPath.set(song.title);
+        this.songPath.set(song.getPath());
 
-        DataManager.recognizeSong(songPath.get())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(recognizeResponse -> {
-                            result.set(recognizeResponse);
-                        },
-                        throwable -> {
-                            Log.e("error", "search: ", throwable);
-                        });
+        DataManager.recognizeSong(songPath.get()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(recognizeResponse -> {
+            result.set(recognizeResponse);
+            File file = new File(song.getPath());
+            String title = recognizeResponse.getMetadata().getMusic().get(0).getTitle();
+            File fileD = new File(folderPath.get().concat("/" + title.concat(file.getName().substring(file.getName().lastIndexOf("."), file.getName().length()))));
+
+            file.renameTo(fileD);
+            song.setTitle(fileD.getName());
+            song.setPath(fileD.getAbsolutePath());
+            editSongSuccPublishSubject.onNext(song);
+        }, throwable -> {
+            Log.e("error", "search: ", throwable);
+        });
     }
 
 
     PublishSubject<Song> editSongPublishSubject = PublishSubject.create();
+    PublishSubject<Song> editSongSuccPublishSubject = PublishSubject.create();
 
     public void editSong(Song song) {
         editSongPublishSubject.onNext(song);
+    }
+
+    public void recFolder() {
+
+        for (Song song : songs) {
+            DataManager.recognizeSong(songPath.get()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(recognizeResponse -> {
+
+            }, throwable -> {
+                Log.e("error", "search: ", throwable);
+            });
+        }
+
     }
 
     public static class Song implements Parcelable {

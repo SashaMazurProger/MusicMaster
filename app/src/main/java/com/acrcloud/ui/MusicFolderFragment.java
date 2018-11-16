@@ -31,8 +31,7 @@ public class MusicFolderFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_music_folder, container, false);
     }
@@ -48,13 +47,15 @@ public class MusicFolderFragment extends Fragment {
             ((MainActivity) getActivity()).navController.navigate(R.id.action_musicFolderFragment_to_songEditFragment, bundle);
         });
 
+
         FragmentMusicFolderBinding binding = FragmentMusicFolderBinding.bind(view);
         binding.setViewModel(viewModel);
 
         RecyclerView listView = binding.list;
-        binding.resultTv.setOnClickListener((v -> {
-            ((MainActivity) getActivity()).navController.navigate(R.id.action_musicFolderFragment_to_songEditFragment);
-        }));
+
+        viewModel.editSongSuccPublishSubject.subscribe(song -> {
+            listView.getAdapter().notifyDataSetChanged();
+        });
 
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
         listView.setAdapter(new SongAdapter(viewModel));

@@ -44,7 +44,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongHolder> {
         viewHolder.binding.setSong(songs.get(i));
         viewHolder.binding.setListener(song -> {
             viewModel.search(song);
-            viewModel.editSong(song);
+//            viewModel.editSong(song);
         });
         viewHolder.binding.executePendingBindings();
     }

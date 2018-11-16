@@ -50,6 +50,13 @@
                     android:text="Open folder"
                     android:onClick="@{ () -> viewModel.loadFolder(viewModel.folderPath)}"/>
 
+                <Button
+                    android:id="@+id/rec_folder_btn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Rec folder"
+                    android:onClick="@{ () -> viewModel.recFolder()}"/>
+
                 <TextView
                     android:id="@+id/result_tv"
                     android:layout_width="fill_parent"
