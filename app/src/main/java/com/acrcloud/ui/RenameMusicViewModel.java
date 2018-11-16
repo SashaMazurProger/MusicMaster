@@ -5,22 +5,20 @@ import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Environment;
+import android.util.Log;
 
-import com.acrcloud.utils.ACRCloudRecognizer;
+import com.acrcloud.data.ACRRecognizeResponse;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class RenameMusicViewModel extends ViewModel {
 
-    public final ObservableField<String> songPath = new ObservableField<>("hello");
+    public final ObservableField<String> songPath = new ObservableField<>();
     public final ObservableField<String> folderPath = new ObservableField<>(Environment.getExternalStorageDirectory().toString() + "/Download/soundloadie");
-    public final ObservableField<String> result = new ObservableField<>();
+    public final ObservableField<ACRRecognizeResponse> result = new ObservableField<>();
     public final ObservableArrayList<Song> songs = new ObservableArrayList<>();
     public final ObservableBoolean loading = new ObservableBoolean(false);
 
@@ -28,72 +26,66 @@ public class RenameMusicViewModel extends ViewModel {
         this.folderPath.set(path);
         File folder = new File(folderPath.get());
         for (File file : folder.listFiles()) {
-            if (file.getName().endsWith(".mp3")) {
-                songs.add(new Song(file.getAbsolutePath()));
+            if (isMusicFile(file.getAbsolutePath())) {
+                songs.add(new Song(file.getName(), path));
             }
         }
     }
 
+    //mp3, mp4, wav, m4a, aac, amr, ape, flv, flac, ogg, wma, caf, alac
+    private boolean isMusicFile(String absolutePath) {
+        return absolutePath.endsWith(".mp3")
+                || absolutePath.endsWith(".mp4")
+                || absolutePath.endsWith(".wav")
+                || absolutePath.endsWith(".m4a")
+                || absolutePath.endsWith(".aac")
+                || absolutePath.endsWith(".amr")
+                || absolutePath.endsWith(".ape")
+                || absolutePath.endsWith(".flv")
+                || absolutePath.endsWith(".flac")
+                || absolutePath.endsWith(".ogg")
+                || absolutePath.endsWith(".wma")
+                || absolutePath.endsWith(".caf")
+                || absolutePath.endsWith(".alac");
+    }
+
     public void search(Song song) {
         this.songPath.set(song.title);
-        //new RecThread().start();
-        Observable.fromCallable(() -> {
-            loading.set(true);
 
-            Map<String, Object> config = new HashMap<String, Object>();
-            config.put("access_key", "37a24216f7bdbfd272dab7035927e4cd");
-            config.put("access_secret", "pfVkL0Vg4frc3Wk92qoqvfGgT8u5nQLLuS3AfHNK");
-            config.put("host", "identify-eu-west-1.acrcloud.com");
-            config.put("debug", false);
-            config.put("timeout", 5);
-
-            ACRCloudRecognizer re = new ACRCloudRecognizer(config);
-            String resultStr = re.recognizeByFile(songPath.get(), 10);
-
-            loading.set(false);
-            return resultStr;
-        })
-                .map(s -> {
-//                    return new RecognizeResponse();
-                    return s;
-                })
+        DataManager.recognizeSong(songPath.get())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(recognizeResponse -> {
                             result.set(recognizeResponse);
                         },
                         throwable -> {
-
+                            Log.e("error", "search: ", throwable);
                         });
     }
 
     public class Song {
-        public String title;
+        private String title;
+        private String path;
 
-        public Song(String title) {
+        public Song(String title, String path) {
+            this.title = title;
+            this.path = path;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
             this.title = title;
         }
-    }
 
+        public String getPath() {
+            return path;
+        }
 
-    class RecThread extends Thread {
-
-        public void run() {
-            loading.set(true);
-
-            Map<String, Object> config = new HashMap<String, Object>();
-            config.put("access_key", "37a24216f7bdbfd272dab7035927e4cd");
-            config.put("access_secret", "pfVkL0Vg4frc3Wk92qoqvfGgT8u5nQLLuS3AfHNK");
-            config.put("host", "identify-eu-west-1.acrcloud.com");
-            config.put("debug", false);
-            config.put("timeout", 5);
-
-            //ACRCloudRecognizer re = new ACRCloudRecognizer(config);
-            MusicRecognizer re = new MusicRecognizer(config);
-            String resultStr = re.recognizeByFile(songPath.get(), 10);
-
-            loading.set(false);
-            result.set(resultStr);
+        public void setPath(String path) {
+            this.path = path;
         }
     }
 }

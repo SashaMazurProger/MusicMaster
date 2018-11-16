@@ -40,15 +40,10 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull final SongHolder viewHolder, int i) {
-//            viewHolder.title.setText(songs.get(i).title);
 
-//        SongItemLayoutBinding binding = SongItemLayoutBinding.bind(viewHolder.itemView);
         viewHolder.binding.setSong(songs.get(i));
-        viewHolder.binding.setListener(new SongItemListener() {
-            @Override
-            public void click(RenameMusicViewModel.Song song) {
-                viewModel.search(song);
-            }
+        viewHolder.binding.setListener(song -> {
+            viewModel.search(song);
         });
         viewHolder.binding.executePendingBindings();
     }

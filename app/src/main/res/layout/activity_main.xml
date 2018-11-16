@@ -55,7 +55,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#000000"
-                    android:text="@{viewModel.result}"/>
+                    android:text="@{viewModel.result.toString()}"/>
 
                 <TextView
                     android:id="@+id/folder_path_tv"
