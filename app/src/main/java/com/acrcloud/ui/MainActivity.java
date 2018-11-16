@@ -13,32 +13,21 @@ import android.view.MenuItem;
 
 import com.acrcloud.ui.databinding.ActivityMainBinding;
 
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 public class MainActivity extends AppCompatActivity {
 
-    private RenameMusicViewModel viewModel;
+    NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
-        viewModel = ViewModelProviders.of(this).get(RenameMusicViewModel.class);
-        binding.setViewModel(viewModel);
-
-        RecyclerView listView = binding.list;
-        listView.setLayoutManager(new LinearLayoutManager(this));
-        listView.setAdapter(new SongAdapter(viewModel));
+        navController=Navigation.findNavController(this,R.id.nav_host_fragment);
 
     }
-
-    @SuppressWarnings("unchecked")
-    @BindingAdapter({"items"})
-    public static void list(RecyclerView listView, ObservableList<RenameMusicViewModel.Song> songList) {
-        ((SongAdapter) listView.getAdapter()).songs = songList;
-        listView.getAdapter().notifyDataSetChanged();
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -56,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
             return true;
         }
 

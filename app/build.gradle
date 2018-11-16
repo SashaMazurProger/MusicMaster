@@ -71,5 +71,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:2.4.0"
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
 
+    implementation group: 'android.arch.navigation', name: 'navigation-fragment', version: '1.0.0-alpha07'
+
     implementation files('libs/acrcloud-android-sdk-1.5.7.6.jar')
 }
