@@ -1,30 +1,46 @@
 package com.acrcloud.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.BindingAdapter;
-import android.databinding.DataBindingUtil;
-import android.databinding.ObservableList;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
+import com.acrcloud.ui.base.BaseActivity;
+import com.acrcloud.ui.databinding.ActivityMainBinding;
+
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity<ActivityMainBinding, RenameMusicViewModel> {
 
     NavController navController;
 
     @Override
+    public int getBindingVariable() {
+        return BR.viewModel;
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    public RenameMusicViewModel getViewModel() {
+        return ViewModelProviders.of(this).get(RenameMusicViewModel.class);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        getViewModel().editSong.observe(this, song -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("song", song);
+            navController.navigate(R.id.action_musicFolderFragment_to_songEditFragment, bundle);
+        });
 
     }
 

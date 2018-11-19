@@ -9,8 +9,10 @@ import java.util.Map;
 
 import io.reactivex.Observable;
 
-public class DataManager {
-    public static Observable<ACRRecognizeResponse> recognizeSong(String path) {
+public class DataManager implements IDataManager {
+
+    @Override
+    public Observable<ACRRecognizeResponse> recognizeSong(String path) {
 
         return Observable.fromCallable(() -> {
 

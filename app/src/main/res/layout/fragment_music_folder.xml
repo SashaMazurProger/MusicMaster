@@ -55,7 +55,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="Rec folder"
-                    android:onClick="@{ () -> viewModel.recFolder()}"/>
+                    android:onClick="@{ () -> viewModel.editFolder()}"/>
 
                 <TextView
                     android:id="@+id/result_tv"

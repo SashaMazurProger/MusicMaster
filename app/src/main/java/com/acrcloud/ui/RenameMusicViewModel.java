@@ -1,29 +1,28 @@
 package com.acrcloud.ui;
 
-import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableArrayList;
-import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Environment;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.acrcloud.data.ACRRecognizeResponse;
+import com.acrcloud.ui.base.BaseViewModel;
 
 import java.io.File;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
-public class RenameMusicViewModel extends ViewModel {
+public class RenameMusicViewModel extends BaseViewModel {
 
-    public final ObservableField<String> songPath = new ObservableField<>();
+    public final MutableLiveData<Song> editSong = new MutableLiveData<>();
     public final ObservableField<String> folderPath = new ObservableField<>(Environment.getExternalStorageDirectory().toString() + "/Download/soundloadie");
     public final ObservableField<ACRRecognizeResponse> result = new ObservableField<>();
     public final ObservableArrayList<Song> songs = new ObservableArrayList<>();
-    public final ObservableBoolean loading = new ObservableBoolean(false);
+
+    public final PublishSubject<Song> onEditSongSuccess = PublishSubject.create();
+
 
     public void loadFolder(String path) {
         this.folderPath.set(path);
@@ -41,41 +40,31 @@ public class RenameMusicViewModel extends ViewModel {
     }
 
     public void search(Song song) {
-        this.songPath.set(song.getPath());
-
-        DataManager.recognizeSong(songPath.get()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(recognizeResponse -> {
-            result.set(recognizeResponse);
-            File file = new File(song.getPath());
-            String title = recognizeResponse.getMetadata().getMusic().get(0).getTitle();
-            File fileD = new File(folderPath.get().concat("/" + title.concat(file.getName().substring(file.getName().lastIndexOf("."), file.getName().length()))));
-
-            file.renameTo(fileD);
-            song.setTitle(fileD.getName());
-            song.setPath(fileD.getAbsolutePath());
-            editSongSuccPublishSubject.onNext(song);
-        }, throwable -> {
-            Log.e("error", "search: ", throwable);
-        });
+//        this.songPath.set(song.getPath());
+//
+//        getDataManager().recognizeSong(songPath.get()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(recognizeResponse -> {
+//            result.set(recognizeResponse);
+//            File file = new File(song.getPath());
+//            String title = recognizeResponse.getMetadata().getMusic().get(0).getTitle();
+//            File fileD = new File(folderPath.get().concat("/" + title.concat(file.getName().substring(file.getName().lastIndexOf("."), file.getName().length()))));
+//
+//            file.renameTo(fileD);
+//            song.setTitle(fileD.getName());
+//            song.setPath(fileD.getAbsolutePath());
+//            onEditSongSuccess.onNext(song);
+//        }, throwable -> {
+//            Log.e("error", "search: ", throwable);
+//        });
     }
 
-
-    PublishSubject<Song> editSongPublishSubject = PublishSubject.create();
-    PublishSubject<Song> editSongSuccPublishSubject = PublishSubject.create();
+    public void editFolder() {
+        for (Song song : songs) {
+            search(song);
+        }
+    }
 
     public void editSong(Song song) {
-        editSongPublishSubject.onNext(song);
-    }
-
-    public void recFolder() {
-
-        for (Song song : songs) {
-            DataManager.recognizeSong(songPath.get()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(recognizeResponse -> {
-
-            }, throwable -> {
-                Log.e("error", "search: ", throwable);
-            });
-        }
-
+        editSong.setValue(song);
     }
 
     public static class Song implements Parcelable {
