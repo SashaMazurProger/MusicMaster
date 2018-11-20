@@ -77,5 +77,10 @@ dependencies {
 
     implementation group: 'android.arch.navigation', name: 'navigation-fragment', version: '1.0.0-alpha07'
 
+//    implementation 'net.jthink:jaudiotagger:2.0.3'
+
+    implementation 'org:jaudiotagger:2.0.3'
+
     implementation files('libs/acrcloud-android-sdk-1.5.7.6.jar')
+    implementation 'com.android.support:design:28.0.0'
 }

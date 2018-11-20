@@ -10,21 +10,32 @@
 
         <variable
             name="viewModel"
-            type="com.acrcloud.ui.RenameMusicViewModel" />
+            type="com.acrcloud.ui.SelectMusicViewModel" />
 
     </data>
 
-    <FrameLayout
+    <RelativeLayout
+        android:id="@+id/main_activity_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorPrimary"
+            android:fitsSystemWindows="true"
+            android:subtitle="Subtitle" />
 
         <fragment
             android:id="@+id/nav_host_fragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"
             app:defaultNavHost="true"
             app:navGraph="@navigation/main_graph" />
 
-    </FrameLayout>
+    </RelativeLayout>
 </layout>

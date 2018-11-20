@@ -14,11 +14,10 @@ import java.io.File;
 
 import io.reactivex.subjects.PublishSubject;
 
-public class RenameMusicViewModel extends BaseViewModel {
+public class SelectMusicViewModel extends BaseViewModel {
 
     public final MutableLiveData<Song> editSong = new MutableLiveData<>();
-    public final ObservableField<String> folderPath = new ObservableField<>(Environment.getExternalStorageDirectory().toString() + "/Download/soundloadie");
-    public final ObservableField<ACRRecognizeResponse> result = new ObservableField<>();
+    public final ObservableField<String> folderPath = new ObservableField<>(Environment.getExternalStorageDirectory().toString() + "/Download/Дискотека 2018 Dance Club Vol. 174 от NNNB/Part 1 (Discoteka)/");
     public final ObservableArrayList<Song> songs = new ObservableArrayList<>();
 
     public final PublishSubject<Song> onEditSongSuccess = PublishSubject.create();

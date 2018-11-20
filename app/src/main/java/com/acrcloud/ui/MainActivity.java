@@ -12,7 +12,7 @@ import com.acrcloud.ui.databinding.ActivityMainBinding;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-public class MainActivity extends BaseActivity<ActivityMainBinding, RenameMusicViewModel> {
+public class MainActivity extends BaseActivity<ActivityMainBinding, SelectMusicViewModel> {
 
     NavController navController;
 
@@ -27,13 +27,15 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, RenameMusicV
     }
 
     @Override
-    public RenameMusicViewModel getViewModel() {
-        return ViewModelProviders.of(this).get(RenameMusicViewModel.class);
+    public SelectMusicViewModel getViewModel() {
+        return ViewModelProviders.of(this).get(SelectMusicViewModel.class);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setSupportActionBar(getViewDataBinding().toolbar);
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         getViewModel().editSong.observe(this, song -> {

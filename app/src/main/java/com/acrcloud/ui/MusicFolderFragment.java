@@ -17,7 +17,7 @@ import com.acrcloud.ui.databinding.FragmentMusicFolderBinding;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MusicFolderFragment extends BaseFragment<FragmentMusicFolderBinding, RenameMusicViewModel> {
+public class MusicFolderFragment extends BaseFragment<FragmentMusicFolderBinding, SelectMusicViewModel> {
 
 
     public MusicFolderFragment() {
@@ -36,8 +36,8 @@ public class MusicFolderFragment extends BaseFragment<FragmentMusicFolderBinding
     }
 
     @Override
-    public RenameMusicViewModel getViewModel() {
-        return ViewModelProviders.of(getActivity()).get(RenameMusicViewModel.class);
+    public SelectMusicViewModel getViewModel() {
+        return ViewModelProviders.of(getActivity()).get(SelectMusicViewModel.class);
     }
 
     @Override

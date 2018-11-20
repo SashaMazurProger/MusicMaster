@@ -12,11 +12,11 @@ import java.util.List;
 
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongHolder> {
 
-    public List<RenameMusicViewModel.Song> songs = new ArrayList<>();
+    public List<SelectMusicViewModel.Song> songs = new ArrayList<>();
 
-    private RenameMusicViewModel viewModel;
+    private SelectMusicViewModel viewModel;
 
-    public SongAdapter(RenameMusicViewModel viewModel) {
+    public SongAdapter(SelectMusicViewModel viewModel) {
         this.viewModel = viewModel;
     }
 

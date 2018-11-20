@@ -20,7 +20,7 @@ import android.databinding.BindingAdapter;
 import android.databinding.ObservableList;
 import android.support.v7.widget.RecyclerView;
 
-import com.acrcloud.ui.RenameMusicViewModel;
+import com.acrcloud.ui.SelectMusicViewModel;
 import com.acrcloud.ui.SongAdapter;
 
 /**
@@ -36,7 +36,7 @@ public final class BindingUtils {
 
     @SuppressWarnings("unchecked")
     @BindingAdapter({"items"})
-    public static void list(RecyclerView listView, ObservableList<RenameMusicViewModel.Song> songList) {
+    public static void list(RecyclerView listView, ObservableList<SelectMusicViewModel.Song> songList) {
         ((SongAdapter) listView.getAdapter()).songs = songList;
         listView.getAdapter().notifyDataSetChanged();
     }
