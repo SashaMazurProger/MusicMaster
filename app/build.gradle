@@ -52,6 +52,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
 
     implementation 'com.android.support:multidex:1.0.3'
 
@@ -82,5 +83,5 @@ dependencies {
     implementation 'org:jaudiotagger:2.0.3'
 
     implementation files('libs/acrcloud-android-sdk-1.5.7.6.jar')
-    implementation 'com.android.support:design:28.0.0'
+
 }

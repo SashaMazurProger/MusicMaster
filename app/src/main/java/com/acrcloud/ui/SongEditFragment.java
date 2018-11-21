@@ -51,7 +51,7 @@ public class SongEditFragment extends BaseFragment<FragmentSongEditBinding, Song
     @Override
     public SongEditViewModel getViewModel() {
         SongEditViewModel viewModel = ViewModelProviders.of(this).get(SongEditViewModel.class);
-        viewModel.editSong.setValue(getArguments().getParcelable("song"));
+        viewModel.getEditSong().setValue(getArguments().getParcelable("song"));
         return viewModel;
     }
 

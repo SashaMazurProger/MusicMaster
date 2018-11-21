@@ -24,17 +24,20 @@ import java.io.IOException;
 
 public class SongEditViewModel extends BaseViewModel {
 
-    public final MutableLiveData<SelectMusicViewModel.Song> editSong = new MutableLiveData<>();
+    private final MutableLiveData<SelectMusicViewModel.Song> editSong = new MutableLiveData<>();
 
-    public final ObservableField<ACRRecognizeResponse> result = new ObservableField<>();
+    private final ObservableField<ACRRecognizeResponse> result = new ObservableField<>();
 
-    public final ObservableField<String> artist = new ObservableField<>();
-    public final ObservableField<String> album = new ObservableField<>();
-    public final ObservableField<String> title = new ObservableField<>();
-    public final ObservableField<String> comment = new ObservableField<>();
-    public final ObservableField<TagField> coverArt = new ObservableField<>();
+    private final ObservableField<String> artist = new ObservableField<>();
+    private final ObservableField<String> album = new ObservableField<>();
+    private final ObservableField<String> title = new ObservableField<>();
+    private final ObservableField<String> comment = new ObservableField<>();
+    private final ObservableField<TagField> coverArt = new ObservableField<>();
     private AudioFile audioFile;
 
+    public SongEditViewModel() {
+
+    }
 
     public void saveMetadata() {
         if (audioFile != null) {
@@ -91,5 +94,37 @@ public class SongEditViewModel extends BaseViewModel {
 
             AppLogger.d(s);
         }
+    }
+
+    public MutableLiveData<SelectMusicViewModel.Song> getEditSong() {
+        return editSong;
+    }
+
+    public ObservableField<ACRRecognizeResponse> getResult() {
+        return result;
+    }
+
+    public ObservableField<String> getArtist() {
+        return artist;
+    }
+
+    public ObservableField<String> getAlbum() {
+        return album;
+    }
+
+    public ObservableField<String> getTitle() {
+        return title;
+    }
+
+    public ObservableField<String> getComment() {
+        return comment;
+    }
+
+    public ObservableField<TagField> getCoverArt() {
+        return coverArt;
+    }
+
+    public AudioFile getAudioFile() {
+        return audioFile;
     }
 }

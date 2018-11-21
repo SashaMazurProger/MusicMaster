@@ -36,6 +36,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, SelectMusicV
         super.onCreate(savedInstanceState);
 
         setSupportActionBar(getViewDataBinding().toolbar);
+        setTitle(getString(R.string.app_name));
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         getViewModel().editSong.observe(this, song -> {
