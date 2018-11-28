@@ -38,7 +38,7 @@ public class SelectMusicViewModel extends BaseViewModel {
         return absolutePath.endsWith(".mp3") || absolutePath.endsWith(".mp4") || absolutePath.endsWith(".wav") || absolutePath.endsWith(".m4a") || absolutePath.endsWith(".aac") || absolutePath.endsWith(".amr") || absolutePath.endsWith(".ape") || absolutePath.endsWith(".flv") || absolutePath.endsWith(".flac") || absolutePath.endsWith(".ogg") || absolutePath.endsWith(".wma") || absolutePath.endsWith(".caf") || absolutePath.endsWith(".alac");
     }
 
-        public void search(Song song) {
+    public void search(Song song) {
 //        this.songPath.set(song.getPath());
 //
 //        getDataManager().recognizeSong(songPath.get()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(recognizeResponse -> {

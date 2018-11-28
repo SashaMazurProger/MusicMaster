@@ -1,9 +1,13 @@
 package com.acrcloud.ui;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.databinding.Observable;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.util.Log;
 
 import com.acrcloud.data.ACRRecognizeResponse;
+import com.acrcloud.data.Music;
 import com.acrcloud.ui.base.BaseViewModel;
 import com.acrcloud.utils.AppLogger;
 
@@ -22,12 +26,16 @@ import org.jaudiotagger.tag.TagField;
 import java.io.File;
 import java.io.IOException;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 public class SongEditViewModel extends BaseViewModel {
 
     private final MutableLiveData<SelectMusicViewModel.Song> editSong = new MutableLiveData<>();
 
     private final ObservableField<ACRRecognizeResponse> result = new ObservableField<>();
 
+    private final ObservableBoolean isFromNetwork = new ObservableBoolean();
     private final ObservableField<String> artist = new ObservableField<>();
     private final ObservableField<String> album = new ObservableField<>();
     private final ObservableField<String> title = new ObservableField<>();
@@ -36,6 +44,34 @@ public class SongEditViewModel extends BaseViewModel {
     private AudioFile audioFile;
 
     public SongEditViewModel() {
+
+        isFromNetwork.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                if (isFromNetwork.get()) {
+                    readNetworkMetadata();
+                } else {
+                    readMetadata();
+                }
+            }
+        });
+    }
+
+    private void readNetworkMetadata() {
+
+        getDataManager().recognizeSong(editSong.getValue().getPath()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(recognizeResponse -> {
+            result.set(recognizeResponse);
+            Music music = recognizeResponse.getMetadata().getMusic().get(0);
+            if (music != null) {
+                artist.set(music.getArtists().get(0).getName());
+                album.set(music.getAlbum().getName());
+                title.set(music.getTitle());
+//                comment.set("");
+//                coverArt.set(music.);
+            }
+        }, throwable -> {
+            Log.e("error", "search: ", throwable);
+        });
 
     }
 
@@ -126,5 +162,9 @@ public class SongEditViewModel extends BaseViewModel {
 
     public AudioFile getAudioFile() {
         return audioFile;
+    }
+
+    public ObservableBoolean getIsFromNetwork() {
+        return isFromNetwork;
     }
 }
