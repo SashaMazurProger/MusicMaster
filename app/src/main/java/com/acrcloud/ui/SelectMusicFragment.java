@@ -17,10 +17,10 @@ import com.acrcloud.ui.databinding.FragmentMusicFolderBinding;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MusicFolderFragment extends BaseFragment<FragmentMusicFolderBinding, SelectMusicViewModel> {
+public class SelectMusicFragment extends BaseFragment<FragmentMusicFolderBinding, SelectMusicViewModel> {
 
 
-    public MusicFolderFragment() {
+    public SelectMusicFragment() {
         // Required empty public constructor
     }
 
@@ -44,9 +44,6 @@ public class MusicFolderFragment extends BaseFragment<FragmentMusicFolderBinding
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         RecyclerView listView = getViewDataBinding().list;
-        getViewModel().onEditSongSuccess.subscribe(song -> {
-            listView.getAdapter().notifyDataSetChanged();
-        });
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
         listView.setAdapter(new SongAdapter(getViewModel()));
 

@@ -16,8 +16,11 @@
 
 package com.acrcloud.ui.base;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
 
 import com.acrcloud.ui.DataManager;
 import com.acrcloud.ui.IDataManager;
@@ -38,6 +41,8 @@ public abstract class BaseViewModel<N> extends ViewModel {
 
     private final ObservableBoolean loading = new ObservableBoolean(false);
 
+    private final MutableLiveData<String> message = new MutableLiveData<>();
+
     private final SchedulerProvider mSchedulerProvider;
 
     private CompositeDisposable mCompositeDisposable;
@@ -53,7 +58,9 @@ public abstract class BaseViewModel<N> extends ViewModel {
     @Override
     protected void onCleared() {
         mCompositeDisposable.dispose();
-        mNavigator.clear();
+        if (mNavigator != null) {
+            mNavigator.clear();
+        }
         super.onCleared();
     }
 
@@ -79,5 +86,9 @@ public abstract class BaseViewModel<N> extends ViewModel {
 
     public ObservableBoolean getLoading() {
         return loading;
+    }
+
+    public MutableLiveData<String> getMessage() {
+        return message;
     }
 }

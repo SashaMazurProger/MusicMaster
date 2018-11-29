@@ -17,18 +17,29 @@ import io.reactivex.subjects.PublishSubject;
 public class SelectMusicViewModel extends BaseViewModel {
 
     public final MutableLiveData<Song> editSong = new MutableLiveData<>();
-    public final ObservableField<String> folderPath = new ObservableField<>(Environment.getExternalStorageDirectory().toString() + "/Download/");
+    public final ObservableField<String> folderPath = new ObservableField<>(Environment.getExternalStorageDirectory().toString() + "/Download/soundloadie/");
     public final ObservableArrayList<Song> songs = new ObservableArrayList<>();
-
-    public final PublishSubject<Song> onEditSongSuccess = PublishSubject.create();
 
 
     public void loadFolder(String path) {
         this.folderPath.set(path);
+        songs.clear();
         File folder = new File(folderPath.get());
         for (File file : folder.listFiles()) {
             if (isMusicFile(file.getAbsolutePath())) {
                 songs.add(new Song(file.getName(), file.getAbsolutePath()));
+            }
+        }
+    }
+
+    public void loadFolder() {
+        songs.clear();
+        if (folderPath.get() != null) {
+            File folder = new File(folderPath.get());
+            for (File file : folder.listFiles()) {
+                if (isMusicFile(file.getAbsolutePath())) {
+                    songs.add(new Song(file.getName(), file.getAbsolutePath()));
+                }
             }
         }
     }
@@ -67,6 +78,8 @@ public class SelectMusicViewModel extends BaseViewModel {
     }
 
     public static class Song implements Parcelable {
+        public static final String KEY = "song";
+
         private String title;
         private String path;
 

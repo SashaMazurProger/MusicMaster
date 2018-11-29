@@ -51,7 +51,8 @@ public class SongEditFragment extends BaseFragment<FragmentSongEditBinding, Song
     @Override
     public SongEditViewModel getViewModel() {
         SongEditViewModel viewModel = ViewModelProviders.of(this).get(SongEditViewModel.class);
-        viewModel.getEditSong().setValue(getArguments().getParcelable("song"));
+        viewModel.getEditSong().setValue(getArguments().getParcelable(SelectMusicViewModel.Song.KEY));
+        viewModel.setNavigator((SongEditNavigator) getActivity());
         return viewModel;
     }
 
@@ -60,5 +61,9 @@ public class SongEditFragment extends BaseFragment<FragmentSongEditBinding, Song
         super.onViewCreated(view, savedInstanceState);
 
         getViewModel().readMetadata();
+        getViewModel().getMessage().observe(this, (o) -> {
+            Toast.makeText(getContext(), o.toString(), Toast.LENGTH_LONG).show();
+        });
     }
+
 }

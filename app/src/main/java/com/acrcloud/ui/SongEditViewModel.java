@@ -4,7 +4,9 @@ import android.arch.lifecycle.MutableLiveData;
 import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.acrcloud.data.ACRRecognizeResponse;
 import com.acrcloud.data.Music;
@@ -29,14 +31,16 @@ import java.io.IOException;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class SongEditViewModel extends BaseViewModel {
+public class SongEditViewModel extends BaseViewModel<SongEditNavigator> {
 
     private final MutableLiveData<SelectMusicViewModel.Song> editSong = new MutableLiveData<>();
 
     private final ObservableField<ACRRecognizeResponse> result = new ObservableField<>();
 
-    private final ObservableBoolean isFromNetwork = new ObservableBoolean();
+    private final ObservableBoolean isFromNetwork = new ObservableBoolean(false);
+    private final ObservableBoolean isEditFileName = new ObservableBoolean(false);
     private final ObservableField<String> artist = new ObservableField<>();
+    private final ObservableField<String> fileName = new ObservableField<>();
     private final ObservableField<String> album = new ObservableField<>();
     private final ObservableField<String> title = new ObservableField<>();
     private final ObservableField<String> comment = new ObservableField<>();
@@ -55,29 +59,50 @@ public class SongEditViewModel extends BaseViewModel {
                 }
             }
         });
+
+        Observable.OnPropertyChangedCallback fileNameCallback = new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                fileName.set(artist.get() + " - " + title.get());
+            }
+        };
+        artist.addOnPropertyChangedCallback(fileNameCallback);
+        title.addOnPropertyChangedCallback(fileNameCallback);
+
+    }
+
+    private String getFileExtension() {
+        File file = new File(editSong.getValue().getPath());
+        String ext = file.getName().substring(file.getName().lastIndexOf("."), file.getName().length());
+        return ext;
     }
 
     private void readNetworkMetadata() {
 
-        getDataManager().recognizeSong(editSong.getValue().getPath()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(recognizeResponse -> {
-            result.set(recognizeResponse);
-            Music music = recognizeResponse.getMetadata().getMusic().get(0);
-            if (music != null) {
-                artist.set(music.getArtists().get(0).getName());
-                album.set(music.getAlbum().getName());
-                title.set(music.getTitle());
+        getDataManager().recognizeSong(editSong.getValue().getPath())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe((d) -> getLoading().set(true))
+                .doOnNext(r -> getLoading().set(false))
+                .subscribe(recognizeResponse -> {
+                    result.set(recognizeResponse);
+                    Music music = recognizeResponse.getMetadata().getMusic().get(0);
+                    if (music != null) {
+                        artist.set(music.getArtists().get(0).getName());
+                        album.set(music.getAlbum().getName());
+                        title.set(music.getTitle());
 //                comment.set("");
 //                coverArt.set(music.);
-            }
-        }, throwable -> {
-            Log.e("error", "search: ", throwable);
-        });
+                    }
+                }, throwable -> {
+                    Log.e("error", "search: ", throwable);
+                });
 
     }
 
     public void saveMetadata() {
         if (audioFile != null) {
-            Tag tag = audioFile.getTag();
+            Tag tag = audioFile.getTagOrCreateAndSetDefault();
 
             try {
                 tag.setField(FieldKey.ARTIST, artist.get());
@@ -87,9 +112,23 @@ public class SongEditViewModel extends BaseViewModel {
                 audioFile.commit();
 
             } catch (FieldDataInvalidException e) {
+                getMessage().postValue("Error");
                 e.printStackTrace();
             } catch (CannotWriteException e) {
+                getMessage().postValue("Error");
                 e.printStackTrace();
+            }
+
+            if (isEditFileName.get()) {
+                File file = new File(editSong.getValue().getPath());
+                String newName = file.getParent() + "/" + fileName.get() + getFileExtension();
+                File fileD = new File(newName);
+                file.renameTo(fileD);
+            }
+
+            getMessage().postValue("Apply");
+            if (getNavigator() != null) {
+                getNavigator().onApplyEdit();
             }
         }
     }
@@ -111,7 +150,7 @@ public class SongEditViewModel extends BaseViewModel {
         }
 
         if (audioFile != null) {
-            Tag tag = audioFile.getTag();
+            Tag tag = audioFile.getTagOrCreateAndSetDefault();
 
             artist.set(tag.getFirst(FieldKey.ARTIST));
             album.set(tag.getFirst(FieldKey.ALBUM));
@@ -166,5 +205,13 @@ public class SongEditViewModel extends BaseViewModel {
 
     public ObservableBoolean getIsFromNetwork() {
         return isFromNetwork;
+    }
+
+    public ObservableField<String> getFileName() {
+        return fileName;
+    }
+
+    public ObservableBoolean getIsEditFileName() {
+        return isEditFileName;
     }
 }

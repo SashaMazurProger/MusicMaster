@@ -12,7 +12,7 @@ import com.acrcloud.ui.databinding.ActivityMainBinding;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-public class MainActivity extends BaseActivity<ActivityMainBinding, SelectMusicViewModel> {
+public class MainActivity extends BaseActivity<ActivityMainBinding, SelectMusicViewModel> implements SongEditNavigator {
 
     NavController navController;
 
@@ -41,7 +41,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, SelectMusicV
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         getViewModel().editSong.observe(this, song -> {
             Bundle bundle = new Bundle();
-            bundle.putParcelable("song", song);
+            bundle.putParcelable(SelectMusicViewModel.Song.KEY, song);
             navController.navigate(R.id.action_musicFolderFragment_to_songEditFragment, bundle);
         });
 
@@ -68,5 +68,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, SelectMusicV
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onApplyEdit() {
+        navController.popBackStack();
+        getViewModel().loadFolder();
     }
 }
