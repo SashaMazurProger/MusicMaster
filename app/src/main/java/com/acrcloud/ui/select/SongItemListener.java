@@ -1,4 +1,4 @@
-package com.acrcloud.ui;
+package com.acrcloud.ui.select;
 
 public interface SongItemListener {
 

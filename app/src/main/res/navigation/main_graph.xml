@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_graph"
-    app:startDestination="@id/mainMenuFragment">
+    app:startDestination="@id/musicFolderFragment">
 
     <fragment
         android:id="@+id/musicFolderFragment"
-        android:name="com.acrcloud.ui.SelectMusicFragment"
+        android:name="com.acrcloud.ui.select.SelectMusicFragment"
         android:label="fragment_music_folder"
         tools:layout="@layout/fragment_music_folder" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/songEditFragment"
-        android:name="com.acrcloud.ui.SongEditFragment"
+        android:name="com.acrcloud.ui.edit.SongEditFragment"
         android:label="fragment_song_edit"
         tools:layout="@layout/fragment_song_edit" />
     <fragment

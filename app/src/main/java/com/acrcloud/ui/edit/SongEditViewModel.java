@@ -1,15 +1,14 @@
-package com.acrcloud.ui;
+package com.acrcloud.ui.edit;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.acrcloud.data.ACRRecognizeResponse;
 import com.acrcloud.data.Music;
+import com.acrcloud.ui.select.SelectMusicViewModel;
 import com.acrcloud.ui.base.BaseViewModel;
 import com.acrcloud.utils.AppLogger;
 

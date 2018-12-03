@@ -10,7 +10,7 @@
 
         <variable
             name="viewModel"
-            type="com.acrcloud.ui.SelectMusicViewModel" />
+            type="com.acrcloud.ui.select.SelectMusicViewModel" />
 
     </data>
 

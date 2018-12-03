@@ -1,6 +1,5 @@
-package com.acrcloud.ui;
+package com.acrcloud.data;
 
-import com.acrcloud.data.ACRRecognizeResponse;
 import com.acrcloud.utils.ACRCloudRecognizer;
 import com.google.gson.Gson;
 

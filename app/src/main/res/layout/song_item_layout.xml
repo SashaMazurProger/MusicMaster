@@ -7,11 +7,11 @@
 
         <variable
             name="song"
-            type="com.acrcloud.ui.SelectMusicViewModel.Song" />
+            type="com.acrcloud.ui.select.SelectMusicViewModel" />
 
         <variable
             name="listener"
-            type="com.acrcloud.ui.SongItemListener" />
+            type="com.acrcloud.ui.select.SongItemListener" />
 
     </data>
 

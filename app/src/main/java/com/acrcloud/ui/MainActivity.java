@@ -8,6 +8,8 @@ import android.view.MenuItem;
 
 import com.acrcloud.ui.base.BaseActivity;
 import com.acrcloud.ui.databinding.ActivityMainBinding;
+import com.acrcloud.ui.edit.SongEditNavigator;
+import com.acrcloud.ui.select.SelectMusicViewModel;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;

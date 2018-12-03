@@ -1,4 +1,4 @@
-package com.acrcloud.ui;
+package com.acrcloud.ui.select;
 
 
 import android.arch.lifecycle.ViewModelProviders;
@@ -10,6 +10,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.acrcloud.ui.BR;
+import com.acrcloud.ui.R;
 import com.acrcloud.ui.base.BaseFragment;
 import com.acrcloud.ui.databinding.FragmentMusicFolderBinding;
 

@@ -20,8 +20,8 @@ import android.databinding.BindingAdapter;
 import android.databinding.ObservableList;
 import android.support.v7.widget.RecyclerView;
 
-import com.acrcloud.ui.SelectMusicViewModel;
-import com.acrcloud.ui.SongAdapter;
+import com.acrcloud.ui.select.SelectMusicViewModel;
+import com.acrcloud.ui.select.SongAdapter;
 
 /**
  * Created by amitshekhar on 11/07/17.

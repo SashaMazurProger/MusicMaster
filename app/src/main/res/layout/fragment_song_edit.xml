@@ -11,7 +11,7 @@
 
         <variable
             name="viewModel"
-            type="com.acrcloud.ui.SongEditViewModel" />
+            type="com.acrcloud.ui.edit.SongEditViewModel" />
 
     </data>
 

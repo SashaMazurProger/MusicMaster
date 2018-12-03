@@ -84,4 +84,6 @@ dependencies {
 
     implementation files('libs/acrcloud-android-sdk-1.5.7.6.jar')
 
+    implementation "com.github.akarnokd:rxjava2-extensions:0.20.5"
+
 }

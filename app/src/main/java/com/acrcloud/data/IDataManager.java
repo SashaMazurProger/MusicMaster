@@ -1,4 +1,4 @@
-package com.acrcloud.ui;
+package com.acrcloud.data;
 
 import com.acrcloud.data.ACRRecognizeResponse;
 

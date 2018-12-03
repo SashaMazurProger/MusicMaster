@@ -16,14 +16,12 @@
 
 package com.acrcloud.ui.base;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
 
-import com.acrcloud.ui.DataManager;
-import com.acrcloud.ui.IDataManager;
+import com.acrcloud.data.DataManager;
+import com.acrcloud.data.IDataManager;
 import com.acrcloud.utils.rx.AppSchedulerProvider;
 import com.acrcloud.utils.rx.SchedulerProvider;
 
