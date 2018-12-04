@@ -7,12 +7,9 @@ import android.os.Environment;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.acrcloud.data.ACRRecognizeResponse;
 import com.acrcloud.ui.base.BaseViewModel;
 
 import java.io.File;
-
-import io.reactivex.subjects.PublishSubject;
 
 public class SelectMusicViewModel extends BaseViewModel {
 
@@ -36,12 +33,26 @@ public class SelectMusicViewModel extends BaseViewModel {
         songs.clear();
         if (folderPath.get() != null) {
             File folder = new File(folderPath.get());
-            for (File file : folder.listFiles()) {
-                if (isMusicFile(file.getAbsolutePath())) {
-                    songs.add(new Song(file.getName(), file.getAbsolutePath()));
+
+            if (folder.exists()) {
+                if (folder.listFiles().length != 0) {
+                    for (File file : folder.listFiles()) {
+                        if (isMusicFile(file.getAbsolutePath())) {
+                            songs.add(new Song(file.getName(), file.getAbsolutePath()));
+                        }
+                    }
                 }
+            } else {
+                toParentFolder();
             }
         }
+    }
+
+    public void toParentFolder() {
+        File curFolder = new File(folderPath.get());
+
+        folderPath.set(curFolder.getParent());
+        loadFolder();
     }
 
     //mp3, mp4, wav, m4a, aac, amr, ape, flv, flac, ogg, wma, caf, alac
@@ -49,7 +60,7 @@ public class SelectMusicViewModel extends BaseViewModel {
         return absolutePath.endsWith(".mp3") || absolutePath.endsWith(".mp4") || absolutePath.endsWith(".wav") || absolutePath.endsWith(".m4a") || absolutePath.endsWith(".aac") || absolutePath.endsWith(".amr") || absolutePath.endsWith(".ape") || absolutePath.endsWith(".flv") || absolutePath.endsWith(".flac") || absolutePath.endsWith(".ogg") || absolutePath.endsWith(".wma") || absolutePath.endsWith(".caf") || absolutePath.endsWith(".alac");
     }
 
-    public void search(Song song) {
+    public void renameAll(Song song) {
 //        this.songPath.set(song.getPath());
 //
 //        getDataManager().recognizeSong(songPath.get()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(recognizeResponse -> {
@@ -63,13 +74,13 @@ public class SelectMusicViewModel extends BaseViewModel {
 //            song.setPath(fileD.getAbsolutePath());
 //            onEditSongSuccess.onNext(song);
 //        }, throwable -> {
-//            Log.e("error", "search: ", throwable);
+//            Log.e("error", "renameAll: ", throwable);
 //        });
     }
 
     public void editFolder() {
         for (Song song : songs) {
-            search(song);
+            renameAll(song);
         }
     }
 

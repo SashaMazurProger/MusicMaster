@@ -28,6 +28,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.Observer;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+
 /**
  * Created by amitshekhar on 09/07/17.
  */
@@ -38,6 +46,8 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends BaseVie
     private View mRootView;
     private B mViewDataBinding;
     private VM mViewModel;
+    private CompositeDisposable mCompositeDisposable;
+
 
     /**
      * Override for set binding variable
@@ -68,6 +78,7 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends BaseVie
             this.mActivity = activity;
             activity.onFragmentAttached();
         }
+        mCompositeDisposable = new CompositeDisposable();
     }
 
     @Override
@@ -86,9 +97,29 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends BaseVie
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        bindEvents();
+    }
+
+    protected void bindEvents() {
+
+    }
+
+    @Override
+    public void onStop() {
+        mCompositeDisposable.clear();
+        super.onStop();
+    }
+
+    @Override
     public void onDetach() {
         mActivity = null;
         super.onDetach();
+    }
+
+    public CompositeDisposable getCompositeDisposable() {
+        return mCompositeDisposable;
     }
 
     @Override
@@ -120,6 +151,29 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends BaseVie
         if (mActivity != null) {
             mActivity.openActivityOnTokenExpire();
         }
+    }
+
+    protected <T> ObservableTransformer<T, T> bindLyfecycle() {
+        return new ObservableTransformer<T, T>() {
+
+            @Override
+            public ObservableSource<T> apply(Observable<T> upstream) {
+
+                upstream.doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        getCompositeDisposable().add(disposable);
+                    }
+                });
+
+                return upstream;
+            }
+
+        };
+    }
+
+    protected void disposable(Disposable subscribe) {
+        getCompositeDisposable().add(subscribe);
     }
 
 //    private void performDependencyInjection() {

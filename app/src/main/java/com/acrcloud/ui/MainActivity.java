@@ -8,13 +8,13 @@ import android.view.MenuItem;
 
 import com.acrcloud.ui.base.BaseActivity;
 import com.acrcloud.ui.databinding.ActivityMainBinding;
-import com.acrcloud.ui.edit.SongEditNavigator;
+import com.acrcloud.ui.edit.MainNavigator;
 import com.acrcloud.ui.select.SelectMusicViewModel;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-public class MainActivity extends BaseActivity<ActivityMainBinding, SelectMusicViewModel> implements SongEditNavigator {
+public class MainActivity extends BaseActivity<ActivityMainBinding, SelectMusicViewModel> implements MainNavigator {
 
     NavController navController;
 

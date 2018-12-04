@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.os.Handler;
 import android.util.Log;
 
 import com.acrcloud.data.ACRRecognizeResponse;
@@ -11,6 +12,7 @@ import com.acrcloud.data.Music;
 import com.acrcloud.ui.select.SelectMusicViewModel;
 import com.acrcloud.ui.base.BaseViewModel;
 import com.acrcloud.utils.AppLogger;
+import com.acrcloud.utils.rx.SchedulerProvider;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -27,10 +29,11 @@ import org.jaudiotagger.tag.TagField;
 import java.io.File;
 import java.io.IOException;
 
+import hu.akarnokd.rxjava2.subjects.DispatchWorkSubject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class SongEditViewModel extends BaseViewModel<SongEditNavigator> {
+public class SongEditViewModel extends BaseViewModel {
 
     private final MutableLiveData<SelectMusicViewModel.Song> editSong = new MutableLiveData<>();
 
@@ -44,6 +47,9 @@ public class SongEditViewModel extends BaseViewModel<SongEditNavigator> {
     private final ObservableField<String> title = new ObservableField<>();
     private final ObservableField<String> comment = new ObservableField<>();
     private final ObservableField<TagField> coverArt = new ObservableField<>();
+
+    private final DispatchWorkSubject onApplyEditEvent = DispatchWorkSubject.create(getSchedulerProvider().ui());
+
     private AudioFile audioFile;
 
     public SongEditViewModel() {
@@ -94,42 +100,43 @@ public class SongEditViewModel extends BaseViewModel<SongEditNavigator> {
 //                coverArt.set(music.);
                     }
                 }, throwable -> {
-                    Log.e("error", "search: ", throwable);
+                    Log.e("error", "renameAll: ", throwable);
                 });
 
     }
 
     public void saveMetadata() {
-        if (audioFile != null) {
-            Tag tag = audioFile.getTagOrCreateAndSetDefault();
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            if (audioFile != null) {
+                Tag tag = audioFile.getTagOrCreateAndSetDefault();
 
-            try {
-                tag.setField(FieldKey.ARTIST, artist.get());
-                tag.setField(FieldKey.ALBUM, album.get());
-                tag.setField(FieldKey.TITLE, title.get());
-                tag.setField(FieldKey.COMMENT, comment.get());
-                audioFile.commit();
+                try {
+                    tag.setField(FieldKey.ARTIST, artist.get());
+                    tag.setField(FieldKey.ALBUM, album.get());
+                    tag.setField(FieldKey.TITLE, title.get());
+                    tag.setField(FieldKey.COMMENT, comment.get());
+                    audioFile.commit();
 
-            } catch (FieldDataInvalidException e) {
-                getMessage().postValue("Error");
-                e.printStackTrace();
-            } catch (CannotWriteException e) {
-                getMessage().postValue("Error");
-                e.printStackTrace();
+                } catch (FieldDataInvalidException e) {
+                    getMessage().onNext("Error");
+                    e.printStackTrace();
+                } catch (CannotWriteException e) {
+                    getMessage().onNext("Error");
+                    e.printStackTrace();
+                }
+
+                if (isEditFileName.get()) {
+                    File file = new File(editSong.getValue().getPath());
+                    String newName = file.getParent() + "/" + fileName.get() + getFileExtension();
+                    File fileD = new File(newName);
+                    file.renameTo(fileD);
+                }
+
+                getMessage().onNext("Apply");
+                onApplyEditEvent.onNext(new Object());
             }
-
-            if (isEditFileName.get()) {
-                File file = new File(editSong.getValue().getPath());
-                String newName = file.getParent() + "/" + fileName.get() + getFileExtension();
-                File fileD = new File(newName);
-                file.renameTo(fileD);
-            }
-
-            getMessage().postValue("Apply");
-            if (getNavigator() != null) {
-                getNavigator().onApplyEdit();
-            }
-        }
+        }, 3000);
     }
 
     public void readMetadata() {
@@ -212,5 +219,9 @@ public class SongEditViewModel extends BaseViewModel<SongEditNavigator> {
 
     public ObservableBoolean getIsEditFileName() {
         return isEditFileName;
+    }
+
+    public DispatchWorkSubject getOnApplyEditEvent() {
+        return onApplyEditEvent;
     }
 }

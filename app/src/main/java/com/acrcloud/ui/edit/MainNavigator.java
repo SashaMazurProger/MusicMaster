@@ -1,6 +1,6 @@
 package com.acrcloud.ui.edit;
 
-public interface SongEditNavigator {
+public interface MainNavigator {
 
     void onApplyEdit();
 }

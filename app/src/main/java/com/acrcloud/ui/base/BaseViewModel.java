@@ -16,7 +16,6 @@
 
 package com.acrcloud.ui.base;
 
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableBoolean;
 
@@ -25,40 +24,36 @@ import com.acrcloud.data.IDataManager;
 import com.acrcloud.utils.rx.AppSchedulerProvider;
 import com.acrcloud.utils.rx.SchedulerProvider;
 
-import java.lang.ref.WeakReference;
-
+import hu.akarnokd.rxjava2.subjects.DispatchWorkSubject;
 import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * Created by amitshekhar on 07/07/17.
  */
 
-public abstract class BaseViewModel<N> extends ViewModel {
+public abstract class BaseViewModel extends ViewModel {
 
     private final IDataManager mDataManager;
 
     private final ObservableBoolean loading = new ObservableBoolean(false);
 
-    private final MutableLiveData<String> message = new MutableLiveData<>();
+    private final DispatchWorkSubject<String> message;
 
     private final SchedulerProvider mSchedulerProvider;
 
     private CompositeDisposable mCompositeDisposable;
 
-    private WeakReference<N> mNavigator;
-
     public BaseViewModel() {
         this.mDataManager = new DataManager();
         this.mSchedulerProvider = new AppSchedulerProvider();
         this.mCompositeDisposable = new CompositeDisposable();
+
+        message = DispatchWorkSubject.create(getSchedulerProvider().ui());
     }
 
     @Override
     protected void onCleared() {
         mCompositeDisposable.dispose();
-        if (mNavigator != null) {
-            mNavigator.clear();
-        }
         super.onCleared();
     }
 
@@ -70,14 +65,6 @@ public abstract class BaseViewModel<N> extends ViewModel {
         return mDataManager;
     }
 
-    public N getNavigator() {
-        return mNavigator.get();
-    }
-
-    public void setNavigator(N navigator) {
-        this.mNavigator = new WeakReference<>(navigator);
-    }
-
     public SchedulerProvider getSchedulerProvider() {
         return mSchedulerProvider;
     }
@@ -86,7 +73,7 @@ public abstract class BaseViewModel<N> extends ViewModel {
         return loading;
     }
 
-    public MutableLiveData<String> getMessage() {
+    public DispatchWorkSubject<String> getMessage() {
         return message;
     }
 }

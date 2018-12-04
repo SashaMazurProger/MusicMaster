@@ -15,6 +15,9 @@ import com.acrcloud.ui.select.SelectMusicViewModel;
 import com.acrcloud.ui.base.BaseFragment;
 import com.acrcloud.ui.databinding.FragmentSongEditBinding;
 
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,18 +44,21 @@ public class SongEditFragment extends BaseFragment<FragmentSongEditBinding, Song
     public SongEditViewModel getViewModel() {
         SongEditViewModel viewModel = ViewModelProviders.of(this).get(SongEditViewModel.class);
         viewModel.getEditSong().setValue(getArguments().getParcelable(SelectMusicViewModel.Song.KEY));
-        viewModel.setNavigator((SongEditNavigator) getActivity());
         return viewModel;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    protected void bindEvents() {
+        super.bindEvents();
+
+        disposable(getViewModel().getOnApplyEditEvent().subscribe((o) -> {
+            ((MainNavigator) getActivity()).onApplyEdit();
+        }));
+
+        disposable(getViewModel().getMessage().subscribe(s -> {
+            Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
+        }));
 
         getViewModel().readMetadata();
-        getViewModel().getMessage().observe(this, (o) -> {
-            Toast.makeText(getContext(), o.toString(), Toast.LENGTH_LONG).show();
-        });
     }
-
 }
