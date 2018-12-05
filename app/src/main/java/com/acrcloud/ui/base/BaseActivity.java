@@ -33,6 +33,9 @@ import android.view.inputmethod.InputMethodManager;
 import com.acrcloud.utils.CommonUtils;
 import com.acrcloud.utils.NetworkUtils;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+
 /**
  * Created by amitshekhar on 07/07/17.
  */
@@ -46,6 +49,7 @@ public abstract class BaseActivity<B extends ViewDataBinding, VM extends BaseVie
     private ProgressDialog mProgressDialog;
     private B mViewDataBinding;
     private VM mViewModel;
+    private CompositeDisposable mCompositeDisposable;
 
     /**
      * Override for set binding variable
@@ -87,6 +91,7 @@ public abstract class BaseActivity<B extends ViewDataBinding, VM extends BaseVie
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 //        performDependencyInjection();
         super.onCreate(savedInstanceState);
+        mCompositeDisposable = new CompositeDisposable();
         performDataBinding();
     }
 
@@ -128,6 +133,20 @@ public abstract class BaseActivity<B extends ViewDataBinding, VM extends BaseVie
 //    public void performDependencyInjection() {
 //        AndroidInjection.inject(this);
 //    }
+
+    @Override
+    public void onStop() {
+        mCompositeDisposable.clear();
+        super.onStop();
+    }
+
+    protected void disposable(Disposable subscribe) {
+        getCompositeDisposable().add(subscribe);
+    }
+
+    private CompositeDisposable getCompositeDisposable() {
+        return mCompositeDisposable;
+    }
 
     @TargetApi(Build.VERSION_CODES.M)
     public void requestPermissionsSafely(String[] permissions, int requestCode) {

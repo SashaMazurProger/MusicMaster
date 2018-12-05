@@ -10,6 +10,7 @@ import com.acrcloud.ui.base.BaseActivity;
 import com.acrcloud.ui.databinding.ActivityMainBinding;
 import com.acrcloud.ui.edit.MainNavigator;
 import com.acrcloud.ui.select.SelectMusicViewModel;
+import com.acrcloud.utils.AppLogger;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -41,10 +42,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, SelectMusicV
         setTitle(getString(R.string.app_name));
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        getViewModel().editSong.observe(this, song -> {
+
+        getViewModel().openSongEvent.subscribe(song -> {
             Bundle bundle = new Bundle();
             bundle.putParcelable(SelectMusicViewModel.Song.KEY, song);
             navController.navigate(R.id.action_musicFolderFragment_to_songEditFragment, bundle);
+        }, throwable -> {
+            AppLogger.e(throwable, "error");
         });
 
     }

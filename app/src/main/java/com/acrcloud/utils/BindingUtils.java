@@ -37,7 +37,7 @@ public final class BindingUtils {
     @SuppressWarnings("unchecked")
     @BindingAdapter({"items"})
     public static void list(RecyclerView listView, ObservableList<SelectMusicViewModel.Song> songList) {
-        ((SongAdapter) listView.getAdapter()).songs = songList;
+        ((SongAdapter) listView.getAdapter()).setSongs(songList);
         listView.getAdapter().notifyDataSetChanged();
     }
 

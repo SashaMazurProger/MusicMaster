@@ -56,7 +56,7 @@
                     android:id="@+id/rec_folder_btn"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{ () -> viewModel.editFolder()}"
+                    android:onClick="@{ () -> viewModel.editFolderNow()}"
                     android:text="Rec folder" />
 
                 <android.support.v7.widget.RecyclerView

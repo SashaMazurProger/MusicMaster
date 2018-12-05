@@ -51,4 +51,14 @@ public class SelectMusicFragment extends BaseFragment<FragmentMusicFolderBinding
 
         super.onViewCreated(view, savedInstanceState);
     }
+
+    @Override
+    protected void bindEvents() {
+        super.bindEvents();
+
+        disposable(getViewModel().itemSongChangedEvent.subscribe(song -> {
+            int index = getViewModel().songs.indexOf(song);
+            getViewDataBinding().list.getAdapter().notifyItemChanged(index);
+        }));
+    }
 }

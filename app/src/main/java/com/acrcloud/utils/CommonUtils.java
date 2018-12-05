@@ -27,6 +27,7 @@ import android.util.Patterns;
 
 import com.acrcloud.ui.R;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -79,5 +80,10 @@ public final class CommonUtils {
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
         return progressDialog;
+    }
+
+    public static String getFileExtension(File file) {
+        String ext = file.getName().substring(file.getName().lastIndexOf("."), file.getName().length());
+        return ext;
     }
 }

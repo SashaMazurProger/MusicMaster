@@ -106,37 +106,35 @@ public class SongEditViewModel extends BaseViewModel {
     }
 
     public void saveMetadata() {
-        Handler handler = new Handler();
-        handler.postDelayed(() -> {
-            if (audioFile != null) {
-                Tag tag = audioFile.getTagOrCreateAndSetDefault();
 
-                try {
-                    tag.setField(FieldKey.ARTIST, artist.get());
-                    tag.setField(FieldKey.ALBUM, album.get());
-                    tag.setField(FieldKey.TITLE, title.get());
-                    tag.setField(FieldKey.COMMENT, comment.get());
-                    audioFile.commit();
+        if (audioFile != null) {
+            Tag tag = audioFile.getTagOrCreateAndSetDefault();
 
-                } catch (FieldDataInvalidException e) {
-                    getMessage().onNext("Error");
-                    e.printStackTrace();
-                } catch (CannotWriteException e) {
-                    getMessage().onNext("Error");
-                    e.printStackTrace();
-                }
+            try {
+                tag.setField(FieldKey.ARTIST, artist.get());
+                tag.setField(FieldKey.ALBUM, album.get());
+                tag.setField(FieldKey.TITLE, title.get());
+                tag.setField(FieldKey.COMMENT, comment.get());
+                audioFile.commit();
 
-                if (isEditFileName.get()) {
-                    File file = new File(editSong.getValue().getPath());
-                    String newName = file.getParent() + "/" + fileName.get() + getFileExtension();
-                    File fileD = new File(newName);
-                    file.renameTo(fileD);
-                }
-
-                getMessage().onNext("Apply");
-                onApplyEditEvent.onNext(new Object());
+            } catch (FieldDataInvalidException e) {
+                getMessage().onNext("Error");
+                e.printStackTrace();
+            } catch (CannotWriteException e) {
+                getMessage().onNext("Error");
+                e.printStackTrace();
             }
-        }, 3000);
+
+            if (isEditFileName.get()) {
+                File file = new File(editSong.getValue().getPath());
+                String newName = file.getParent() + "/" + fileName.get() + getFileExtension();
+                File fileD = new File(newName);
+                file.renameTo(fileD);
+            }
+
+            getMessage().onNext("Apply");
+            onApplyEditEvent.onNext(new Object());
+        }
     }
 
     public void readMetadata() {
