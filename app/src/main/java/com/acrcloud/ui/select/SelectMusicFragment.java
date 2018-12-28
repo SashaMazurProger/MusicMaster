@@ -14,6 +14,7 @@ import com.acrcloud.ui.BR;
 import com.acrcloud.ui.R;
 import com.acrcloud.ui.base.BaseFragment;
 import com.acrcloud.ui.databinding.FragmentMusicFolderBinding;
+import com.acrcloud.ui.edit.MainNavigator;
 
 
 /**
@@ -39,15 +40,19 @@ public class SelectMusicFragment extends BaseFragment<FragmentMusicFolderBinding
 
     @Override
     public SelectMusicViewModel getViewModel() {
-        return ViewModelProviders.of(getActivity()).get(SelectMusicViewModel.class);
+        SelectMusicViewModel viewModel = ViewModelProviders.of(getActivity()).get(SelectMusicViewModel.class);
+        viewModel.setNavigator((MainNavigator) getActivity());
+        return viewModel;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        RecyclerView listView = getViewDataBinding().list;
+        RecyclerView listView = getBinding().list;
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
         listView.setAdapter(new SongAdapter(getViewModel()));
+
+        getViewModel().loadFolder();
 
         super.onViewCreated(view, savedInstanceState);
     }
@@ -58,7 +63,8 @@ public class SelectMusicFragment extends BaseFragment<FragmentMusicFolderBinding
 
         disposable(getViewModel().itemSongChangedEvent.subscribe(song -> {
             int index = getViewModel().songs.indexOf(song);
-            getViewDataBinding().list.getAdapter().notifyItemChanged(index);
+            getBinding().list.getAdapter().notifyItemChanged(index);
         }));
+
     }
 }

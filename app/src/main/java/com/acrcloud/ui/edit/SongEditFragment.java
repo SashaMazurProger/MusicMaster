@@ -2,21 +2,18 @@ package com.acrcloud.ui.edit;
 
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.Observable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import com.acrcloud.ui.BR;
 import com.acrcloud.ui.R;
-import com.acrcloud.ui.select.SelectMusicViewModel;
+import com.acrcloud.ui.Song;
 import com.acrcloud.ui.base.BaseFragment;
 import com.acrcloud.ui.databinding.FragmentSongEditBinding;
-
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 
 /**
@@ -43,22 +40,28 @@ public class SongEditFragment extends BaseFragment<FragmentSongEditBinding, Song
     @Override
     public SongEditViewModel getViewModel() {
         SongEditViewModel viewModel = ViewModelProviders.of(this).get(SongEditViewModel.class);
-        viewModel.getEditSong().setValue(getArguments().getParcelable(SelectMusicViewModel.Song.KEY));
+        viewModel.setNavigator((MainNavigator) getActivity());
+        viewModel.getEditSong().setValue(getArguments().getParcelable(Song.KEY));
         return viewModel;
     }
 
     @Override
-    protected void bindEvents() {
-        super.bindEvents();
-
-        disposable(getViewModel().getOnApplyEditEvent().subscribe((o) -> {
-            ((MainNavigator) getActivity()).onApplyEdit();
-        }));
-
-        disposable(getViewModel().getMessage().subscribe(s -> {
-            Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
-        }));
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         getViewModel().readMetadata();
+
     }
+
+//    @Override
+//    protected void bindEvents() {
+//        super.bindEvents();
+//
+//        getViewModel().getCoverArt().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+//            @Override
+//            public void onPropertyChanged(Observable sender, int propertyId) {
+//                ((ImageView) getBinding().imageView).setImageBitmap(getViewModel().getCoverArt().get());
+//            }
+//        });
+//    }
 }

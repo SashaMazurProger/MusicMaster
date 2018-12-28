@@ -27,14 +27,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.ObservableTransformer;
-import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 /**
  * Created by amitshekhar on 09/07/17.
@@ -83,7 +79,6 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends BaseVie
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-//        performDependencyInjection();
         super.onCreate(savedInstanceState);
         mViewModel = getViewModel();
         setHasOptionsMenu(false);
@@ -103,6 +98,10 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends BaseVie
     }
 
     protected void bindEvents() {
+
+        disposable(getViewModel().getMessage().subscribe(s -> {
+            Toast.makeText(getContext(), (String) s, Toast.LENGTH_LONG).show();
+        }));
 
     }
 
@@ -133,7 +132,7 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends BaseVie
         return mActivity;
     }
 
-    public B getViewDataBinding() {
+    public B getBinding() {
         return mViewDataBinding;
     }
 
@@ -147,38 +146,9 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends BaseVie
         return mActivity != null && mActivity.isNetworkConnected();
     }
 
-    public void openActivityOnTokenExpire() {
-        if (mActivity != null) {
-            mActivity.openActivityOnTokenExpire();
-        }
-    }
-
-    protected <T> ObservableTransformer<T, T> bindLyfecycle() {
-        return new ObservableTransformer<T, T>() {
-
-            @Override
-            public ObservableSource<T> apply(Observable<T> upstream) {
-
-                upstream.doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        getCompositeDisposable().add(disposable);
-                    }
-                });
-
-                return upstream;
-            }
-
-        };
-    }
-
     protected void disposable(Disposable subscribe) {
         getCompositeDisposable().add(subscribe);
     }
-
-//    private void performDependencyInjection() {
-//        AndroidSupportInjection.inject(this);
-//    }
 
     public interface Callback {
 

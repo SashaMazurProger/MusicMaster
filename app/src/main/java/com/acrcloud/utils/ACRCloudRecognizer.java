@@ -1,9 +1,7 @@
 /**
- *
- *  @author qinxue.pan E-mail: xue@acrcloud.com
- *  @version 1.0.0
- *  @create 2015.10.01
- *  
+ * @author qinxue.pan E-mail: xue@acrcloud.com
+ * @version 1.0.0
+ * @create 2015.10.01
  **/
 
 /*
@@ -17,6 +15,7 @@ This module can recognize ACRCloud by most of audio/video file.
 package com.acrcloud.utils;
 
 import android.util.Base64;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +30,6 @@ import java.net.URL;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-import android.util.Log;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -48,19 +46,19 @@ public class ACRCloudRecognizer {
 
     public ACRCloudRecognizer(Map<String, Object> config) {
         if (config.get("host") != null) {
-            this.host = (String)config.get("host");
+            this.host = (String) config.get("host");
         }
         if (config.get("access_key") != null) {
-            this.accessKey = (String)config.get("access_key");
+            this.accessKey = (String) config.get("access_key");
         }
         if (config.get("access_secret") != null) {
-            this.accessSecret = (String)config.get("access_secret");
+            this.accessSecret = (String) config.get("access_secret");
         }
         if (config.get("timeout") != null) {
-            this.timeout = 1000 * ((Integer)config.get("timeout")).intValue();
+            this.timeout = 1000 * ((Integer) config.get("timeout")).intValue();
         }
         if (config.get("debug") != null) {
-            this.debug = ((Boolean)config.get("debug")).booleanValue();
+            this.debug = ((Boolean) config.get("debug")).booleanValue();
             if (this.debug) {
                 ACRCloudExtrTool.setDebug();
             }
@@ -68,17 +66,16 @@ public class ACRCloudRecognizer {
     }
 
     /**
-      *
-      *  recognize by wav audio buffer(RIFF (little-endian) data, WAVE audio, Microsoft PCM, 16 bit, mono 8000 Hz) 
-      *
-      *  @param wavAudioBuffer query audio buffer
-      *  @param wavAudioBufferLen the length of wavAudioBuffer
-      *  
-      *  @return result 
-      *
-      **/
-    public String recognize(byte[] wavAudioBuffer, int wavAudioBufferLen)
-    {
+     *
+     *  recognize by wav audio buffer(RIFF (little-endian) data, WAVE audio, Microsoft PCM, 16 bit, mono 8000 Hz)
+     *
+     *  @param wavAudioBuffer query audio buffer
+     *  @param wavAudioBufferLen the length of wavAudioBuffer
+     *
+     *  @return result
+     *
+     **/
+    public String recognize(byte[] wavAudioBuffer, int wavAudioBufferLen) {
         byte[] fp = ACRCloudExtrTool.createFingerprint(wavAudioBuffer, wavAudioBufferLen, false);
         if (fp == null) {
             return ACRCloudStatusCode.DECODE_AUDIO_ERROR;
@@ -90,19 +87,18 @@ public class ACRCloudRecognizer {
     }
 
     /**
-      *
-      *  recognize by buffer of (Audio/Video file)
-      *          Audio: mp3, mp4, wav, m4a, aac, amr, ape, flv, flac, ogg, wma, caf, alac
-      *
-      *  @param fileBuffer query buffer
-      *  @param fileBufferLen the length of fileBufferLen 
-      *  @param startSeconds skip (startSeconds) seconds from from the beginning of fileBuffer
-      *  
-      *  @return result 
-      *
-      **/
-    public String recognizeByFileBuffer(byte[] fileBuffer, int fileBufferLen, int startSeconds)
-    {
+     *
+     *  recognize by buffer of (Audio/Video file)
+     *          Audio: mp3, mp4, wav, m4a, aac, amr, ape, flv, flac, ogg, wma, caf, alac
+     *
+     *  @param fileBuffer query buffer
+     *  @param fileBufferLen the length of fileBufferLen
+     *  @param startSeconds skip (startSeconds) seconds from from the beginning of fileBuffer
+     *
+     *  @return result
+     *
+     **/
+    public String recognizeByFileBuffer(byte[] fileBuffer, int fileBufferLen, int startSeconds) {
         byte[] fp = ACRCloudExtrTool.createFingerprintByFileBuffer(fileBuffer, fileBufferLen, startSeconds, 12, false);
         if (fp == null) {
             return ACRCloudStatusCode.DECODE_AUDIO_ERROR;
@@ -114,18 +110,17 @@ public class ACRCloudRecognizer {
     }
 
     /**
-      *
-      *  recognize by file songPath of (Audio/Video file)
-      *          Audio: mp3, mp4, wav, m4a, aac, amr, ape, flv, flac, ogg, wma, caf, alac
-      *
-      *  @param filePath query file songPath
-      *  @param startSeconds skip (startSeconds) seconds from from the beginning of (filePath)
-      *  
-      *  @return result 
-      *
-      **/
-    public String recognizeByFile(String filePath, int startSeconds)
-    {
+     *
+     *  recognize by file songPath of (Audio/Video file)
+     *          Audio: mp3, mp4, wav, m4a, aac, amr, ape, flv, flac, ogg, wma, caf, alac
+     *
+     *  @param filePath query file songPath
+     *  @param startSeconds skip (startSeconds) seconds from from the beginning of (filePath)
+     *
+     *  @return result
+     *
+     **/
+    public String recognizeByFile(String filePath, int startSeconds) {
         byte[] fp = ACRCloudExtrTool.createFingerprintByFile(filePath, startSeconds, 12, false);
 
         if (fp == null) {
@@ -138,10 +133,10 @@ public class ACRCloudRecognizer {
         //Log.e(TAG, ""+fp.length);
         return this.doRecogize(fp);
     }
- 
+
     private String doRecogize(byte[] fp) {
 
-        System.out.println(""+fp.length);
+        System.out.println("" + fp.length);
 
         String method = "POST";
         String httpURL = "/v1/identify";
@@ -191,14 +186,14 @@ public class ACRCloudRecognizer {
         }
         return "";
     }
-    
-    private String getUTCTimeSeconds() {  
-        Calendar cal = Calendar.getInstance();   
-        int zoneOffset = cal.get(Calendar.ZONE_OFFSET);   
-        int dstOffset = cal.get(Calendar.DST_OFFSET);    
-        cal.add(Calendar.MILLISECOND, -(zoneOffset + dstOffset));    
-        return cal.getTimeInMillis()/1000 + "";
-    }  
+
+    private String getUTCTimeSeconds() {
+        Calendar cal = Calendar.getInstance();
+        int zoneOffset = cal.get(Calendar.ZONE_OFFSET);
+        int dstOffset = cal.get(Calendar.DST_OFFSET);
+        cal.add(Calendar.MILLISECOND, -(zoneOffset + dstOffset));
+        return cal.getTimeInMillis() / 1000 + "";
+    }
 
     private String postHttp(String posturl, Map<String, Object> params, int timeOut) {
         String res = "";
@@ -206,7 +201,7 @@ public class ACRCloudRecognizer {
         String BOUNDARY = "--" + BOUNDARYSTR + "\r\n";
         String ENDBOUNDARY = "--" + BOUNDARYSTR + "--\r\n\r\n";
         String stringKeyHeader = BOUNDARY + "Content-Disposition:form-data;name=\"%s\"" + "\r\n\r\n%s\r\n";
-        String filePartHeader = BOUNDARY + "Content-Disposition: form-data;name=\"%s\";filename=\"%s\"\r\n" + "Content-Type:application/octet-stream\r\n\r\n";		
+        String filePartHeader = BOUNDARY + "Content-Disposition: form-data;name=\"%s\";filename=\"%s\"\r\n" + "Content-Type:application/octet-stream\r\n\r\n";
         URL url = null;
         HttpURLConnection conn = null;
         BufferedOutputStream out = null;
@@ -216,7 +211,7 @@ public class ACRCloudRecognizer {
             for (String key : params.keySet()) {
                 Object value = params.get(key);
                 if (value instanceof String || value instanceof Integer) {
-                    postBufferStream.write(String.format(stringKeyHeader, key, (String)value).getBytes());
+                    postBufferStream.write(String.format(stringKeyHeader, key, (String) value).getBytes());
                 } else if (value instanceof byte[]) {
                     postBufferStream.write(String.format(filePartHeader, key, key).getBytes());
                     postBufferStream.write((byte[]) value);
@@ -224,7 +219,7 @@ public class ACRCloudRecognizer {
                 }
             }
             postBufferStream.write(ENDBOUNDARY.getBytes());
-            
+
             url = new URL(posturl);
             conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(timeOut);
@@ -281,8 +276,7 @@ public class ACRCloudRecognizer {
     }
 }
 
-class ACRCloudStatusCode
-{
+class ACRCloudStatusCode {
     public static String HTTP_ERROR = "{\"status\":{\"msg\":\"Http Error\", \"code\":3000}}";
     public static String NO_RESULT = "{\"status\":{\"msg\":\"No Result\", \"code\":1001}}";
     public static String DECODE_AUDIO_ERROR = "{\"status\":{\"msg\":\"Can not decode audio data\", \"code\":2005}}";

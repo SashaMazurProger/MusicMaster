@@ -24,6 +24,8 @@ import com.acrcloud.data.IDataManager;
 import com.acrcloud.utils.rx.AppSchedulerProvider;
 import com.acrcloud.utils.rx.SchedulerProvider;
 
+import java.lang.ref.WeakReference;
+
 import hu.akarnokd.rxjava2.subjects.DispatchWorkSubject;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -31,7 +33,7 @@ import io.reactivex.disposables.CompositeDisposable;
  * Created by amitshekhar on 07/07/17.
  */
 
-public abstract class BaseViewModel extends ViewModel {
+public abstract class BaseViewModel<N> extends ViewModel {
 
     private final IDataManager mDataManager;
 
@@ -42,6 +44,8 @@ public abstract class BaseViewModel extends ViewModel {
     private final SchedulerProvider mSchedulerProvider;
 
     private CompositeDisposable mCompositeDisposable;
+
+    private WeakReference<N> mNavigator;
 
     public BaseViewModel() {
         this.mDataManager = new DataManager();
@@ -75,5 +79,13 @@ public abstract class BaseViewModel extends ViewModel {
 
     public DispatchWorkSubject<String> getMessage() {
         return message;
+    }
+
+    public N getNavigator() {
+        return mNavigator == null ? null : mNavigator.get();
+    }
+
+    public void setNavigator(N mNavigator) {
+        this.mNavigator = new WeakReference<N>(mNavigator);
     }
 }

@@ -1,21 +1,24 @@
 package com.acrcloud.ui.select;
 
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.acrcloud.ui.Song;
 import com.acrcloud.ui.databinding.SongItemLayoutBinding;
-import com.acrcloud.ui.BR;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.acrcloud.ui.Song.TYPE.SONG;
+
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongHolder> {
 
-    private List<SelectMusicViewModel.Song> songs = new ArrayList<>();
+    private static final int FOLDER_ITEM = 1;
+    private static final int SONG_ITEM = 2;
+
+    private List<Song> songs = new ArrayList<>();
 
     private SelectMusicViewModel viewModel;
 
@@ -32,7 +35,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongHolder> {
         return new SongHolder(binding);
     }
 
-    public void setSongs(List<SelectMusicViewModel.Song> songs) {
+    public void setSongs(List<Song> songs) {
         this.songs.clear();
         this.songs.addAll(songs);
 
@@ -51,18 +54,37 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongHolder> {
     public void onBindViewHolder(@NonNull final SongHolder viewHolder, int i) {
 
         viewHolder.binding.setSong(songs.get(i));
-        viewHolder.binding.setListener(new SongItemListener() {
-            @Override
-            public void click(SelectMusicViewModel.Song song) {
-                viewModel.editSong(song);
-            }
+        if (getItemViewType(i) == SONG_ITEM) {
+            viewHolder.binding.setListener(new SongItemListener() {
+                @Override
+                public void click(Song song) {
+                    viewModel.onItemSelected(song);
+                }
 
-            @Override
-            public void editNow(SelectMusicViewModel.Song song) {
-                viewModel.editSongNow(song);
-            }
-        });
+                @Override
+                public void editNow(Song song) {
+                    viewModel.editSelectedSongNow(song);
+                }
+            });
+        } else {
+            viewHolder.binding.setListener(new SongItemListener() {
+                @Override
+                public void click(Song song) {
+                    viewModel.onItemSelected(song);
+                }
+
+                @Override
+                public void editNow(Song song) {
+                    viewModel.editSelectedFolderNow(song);
+                }
+            });
+        }
         viewHolder.binding.executePendingBindings();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return songs.get(position).getType() == SONG ? SONG_ITEM : FOLDER_ITEM;
     }
 
     @Override
@@ -70,36 +92,4 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongHolder> {
         return songs.size();
     }
 
-    private static class ObservableSong extends BaseObservable {
-        private SelectMusicViewModel.Song song;
-        private boolean editing;
-
-        public ObservableSong(SelectMusicViewModel.Song song) {
-            this.song = song;
-            notifyPropertyChanged(BR.title);
-            setIsEditing(true);
-        }
-
-        @Bindable
-        public String getTitle() {
-            return song.getTitle();
-        }
-
-        @Bindable
-        public boolean getIsEditing() {
-            return editing;
-        }
-
-
-        public void setTitle(String title) {
-            song.setTitle(title);
-            notifyPropertyChanged(BR.title);
-        }
-
-        public void setIsEditing(boolean isEditing) {
-            editing = isEditing;
-            notifyPropertyChanged(BR.isEditing);
-        }
-
-    }
 }

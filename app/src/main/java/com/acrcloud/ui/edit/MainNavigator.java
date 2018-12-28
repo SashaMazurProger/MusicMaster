@@ -1,6 +1,10 @@
 package com.acrcloud.ui.edit;
 
+import com.acrcloud.ui.Song;
+
 public interface MainNavigator {
 
-    void onApplyEdit();
+    void onApplyEditOpenedSong();
+
+    void onItemSongSelected(Song song);
 }

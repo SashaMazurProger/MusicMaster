@@ -1,14 +1,12 @@
-
 package com.acrcloud.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Status implements Parcelable
-{
+public class Status implements Parcelable {
 
     @SerializedName("msg")
     @Expose
@@ -23,7 +21,7 @@ public class Status implements Parcelable
 
 
         @SuppressWarnings({
-            "unchecked"
+                "unchecked"
         })
         public Status createFromParcel(Parcel in) {
             return new Status(in);
@@ -33,8 +31,7 @@ public class Status implements Parcelable
             return (new Status[size]);
         }
 
-    }
-    ;
+    };
 
     protected Status(Parcel in) {
         this.msg = ((String) in.readValue((String.class.getClassLoader())));
@@ -44,13 +41,11 @@ public class Status implements Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public Status() {
     }
 
     /**
-     * 
      * @param code
      * @param msg
      * @param version
@@ -93,7 +88,7 @@ public class Status implements Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

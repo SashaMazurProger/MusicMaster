@@ -8,9 +8,11 @@
 
         <import type="android.view.View" />
 
+        <import type="com.acrcloud.ui.Song.TYPE" />
+
         <variable
             name="song"
-            type="com.acrcloud.ui.select.SelectMusicViewModel.Song" />
+            type="com.acrcloud.ui.Song" />
 
         <variable
             name="listener"
@@ -18,66 +20,81 @@
 
     </data>
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/md_white_1000"
-        android:onClick="@{ () -> listener.click(song)}">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/title"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_toStartOf="@+id/action"
-            android:layout_toLeftOf="@+id/action"
-            android:text="@{song.title}"
-            android:textColor="@color/md_black_1000"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/action"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="title" />
+            android:background="@color/md_white_1000"
+            android:onClick="@{ () -> listener.click(song)}"
+            android:orientation="horizontal"
+            android:padding="16dp">
 
-
-        <FrameLayout
-            android:id="@+id/action"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp">
-
-            <ImageButton
-                android:id="@+id/imageButton"
+            <ImageView
+                android:id="@+id/icon"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@color/md_white_1000"
-                android:onClick="@{()-> listener.editNow(song)}"
-                android:visibility="@{ !song.isEditing ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_if_play" />
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:src="@{song.getType == TYPE.SONG ? @drawable/ic_music_note_black_24dp : @drawable/ic_folder_black_24dp}" />
 
-            <ProgressBar
-                android:id="@+id/progressBar3"
-                style="?android:attr/progressBarStyle"
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_toStartOf="@+id/action"
+                android:layout_toLeftOf="@+id/action"
+                android:layout_toEndOf="@+id/icon"
+                android:layout_toRightOf="@+id/icon"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="@{song.title}"
+                android:textColor="@color/md_black_1000"
+                android:textSize="18sp"
+                tools:text="texttexttexttexttexttexttexttexttexttext" />
+
+
+            <FrameLayout
+                android:id="@+id/action"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:visibility="@{ song.isEditing ? View.VISIBLE : View.GONE}" />
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:visibility="@{ song.getType == TYPE.SONG  ? View.VISIBLE : View.GONE}">
 
-        </FrameLayout>
-    </RelativeLayout>
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/md_white_1000"
+                    android:onClick="@{()-> listener.editNow(song)}"
+                    android:src="@drawable/ic_edit_black_24dp"
+                    android:visibility="@{ !song.isEditing ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar3"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:visibility="@{ song.isEditing ? View.VISIBLE : View.GONE}" />
+
+            </FrameLayout>
+
+        </RelativeLayout>
+    </FrameLayout>
 </layout>

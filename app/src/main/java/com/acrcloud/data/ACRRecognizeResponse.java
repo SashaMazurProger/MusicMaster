@@ -1,14 +1,12 @@
-
 package com.acrcloud.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ACRRecognizeResponse implements Parcelable
-{
+public class ACRRecognizeResponse implements Parcelable {
 
     @SerializedName("status")
     @Expose
@@ -26,7 +24,7 @@ public class ACRRecognizeResponse implements Parcelable
 
 
         @SuppressWarnings({
-            "unchecked"
+                "unchecked"
         })
         public ACRRecognizeResponse createFromParcel(Parcel in) {
             return new ACRRecognizeResponse(in);
@@ -36,8 +34,7 @@ public class ACRRecognizeResponse implements Parcelable
             return (new ACRRecognizeResponse[size]);
         }
 
-    }
-    ;
+    };
 
     protected ACRRecognizeResponse(Parcel in) {
         this.status = ((Status) in.readValue((Status.class.getClassLoader())));
@@ -48,13 +45,11 @@ public class ACRRecognizeResponse implements Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public ACRRecognizeResponse() {
     }
 
     /**
-     * 
      * @param status
      * @param resultType
      * @param costTime
@@ -108,7 +103,7 @@ public class ACRRecognizeResponse implements Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

@@ -9,7 +9,7 @@
         android:id="@+id/musicFolderFragment"
         android:name="com.acrcloud.ui.select.SelectMusicFragment"
         android:label="fragment_music_folder"
-        tools:layout="@layout/fragment_music_folder" >
+        tools:layout="@layout/fragment_music_folder">
         <action
             android:id="@+id/action_musicFolderFragment_to_songEditFragment"
             app:destination="@id/songEditFragment" />
@@ -23,7 +23,7 @@
         android:id="@+id/mainMenuFragment"
         android:name="com.acrcloud.ui.MainMenuFragment"
         android:label="fragment_main_menu"
-        tools:layout="@layout/fragment_main_menu" >
+        tools:layout="@layout/fragment_main_menu">
         <action
             android:id="@+id/action_mainMenuFragment_to_musicFolderFragment"
             app:destination="@id/musicFolderFragment" />

@@ -1,16 +1,15 @@
-
 package com.acrcloud.data;
 
-import java.util.ArrayList;
-import java.util.List;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Metadata implements Parcelable
-{
+import java.util.ArrayList;
+import java.util.List;
+
+public class Metadata implements Parcelable {
 
     @SerializedName("music")
     @Expose
@@ -22,7 +21,7 @@ public class Metadata implements Parcelable
 
 
         @SuppressWarnings({
-            "unchecked"
+                "unchecked"
         })
         public Metadata createFromParcel(Parcel in) {
             return new Metadata(in);
@@ -32,8 +31,7 @@ public class Metadata implements Parcelable
             return (new Metadata[size]);
         }
 
-    }
-    ;
+    };
 
     protected Metadata(Parcel in) {
         in.readList(this.music, (Music.class.getClassLoader()));
@@ -42,13 +40,11 @@ public class Metadata implements Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public Metadata() {
     }
 
     /**
-     * 
      * @param music
      * @param timestampUtc
      */
@@ -80,7 +76,7 @@ public class Metadata implements Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

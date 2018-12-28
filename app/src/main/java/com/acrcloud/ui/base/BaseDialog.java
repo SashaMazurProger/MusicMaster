@@ -113,11 +113,6 @@ public abstract class BaseDialog extends DialogFragment {
         return mActivity != null && mActivity.isNetworkConnected();
     }
 
-    public void openActivityOnTokenExpire() {
-        if (mActivity != null) {
-            mActivity.openActivityOnTokenExpire();
-        }
-    }
 
     public void showLoading() {
         if (mActivity != null) {

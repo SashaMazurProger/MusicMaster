@@ -1,16 +1,15 @@
-
 package com.acrcloud.data;
 
-import java.util.ArrayList;
-import java.util.List;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Music implements Parcelable
-{
+import java.util.ArrayList;
+import java.util.List;
+
+public class Music implements Parcelable {
 
     @SerializedName("external_ids")
     @Expose
@@ -55,7 +54,7 @@ public class Music implements Parcelable
 
 
         @SuppressWarnings({
-            "unchecked"
+                "unchecked"
         })
         public Music createFromParcel(Parcel in) {
             return new Music(in);
@@ -65,8 +64,7 @@ public class Music implements Parcelable
             return (new Music[size]);
         }
 
-    }
-    ;
+    };
 
     protected Music(Parcel in) {
         this.externalIds = ((ExternalIds) in.readValue((ExternalIds.class.getClassLoader())));
@@ -86,13 +84,11 @@ public class Music implements Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public Music() {
     }
 
     /**
-     * 
      * @param acrid
      * @param artists
      * @param externalIds
@@ -245,7 +241,7 @@ public class Music implements Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

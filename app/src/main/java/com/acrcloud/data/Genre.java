@@ -1,14 +1,12 @@
-
 package com.acrcloud.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Genre implements Parcelable
-{
+public class Genre implements Parcelable {
 
     @SerializedName("name")
     @Expose
@@ -17,7 +15,7 @@ public class Genre implements Parcelable
 
 
         @SuppressWarnings({
-            "unchecked"
+                "unchecked"
         })
         public Genre createFromParcel(Parcel in) {
             return new Genre(in);
@@ -27,8 +25,7 @@ public class Genre implements Parcelable
             return (new Genre[size]);
         }
 
-    }
-    ;
+    };
 
     protected Genre(Parcel in) {
         this.name = ((String) in.readValue((String.class.getClassLoader())));
@@ -36,13 +33,11 @@ public class Genre implements Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public Genre() {
     }
 
     /**
-     * 
      * @param name
      */
     public Genre(String name) {
@@ -63,7 +58,7 @@ public class Genre implements Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

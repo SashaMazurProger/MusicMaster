@@ -1,9 +1,7 @@
 /**
- *
- *  @author qinxue.pan E-mail: xue@acrcloud.com
- *  @version 1.0.0
- *  @create 2015.10.01
- *  
+ * @author qinxue.pan E-mail: xue@acrcloud.com
+ * @version 1.0.0
+ * @create 2015.10.01
  **/
 
 package com.acrcloud.utils;
@@ -54,14 +52,14 @@ public class ACRCloudExtrTool {
         try {
             System.loadLibrary("ACRCloudExtrTool");
             native_init();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("ACRCloudExtrTool loadLibrary error!");
         }
     }
 
     public ACRCloudExtrTool() {
     }
- 
+
     public static byte[] createFingerprintByFile(String fileName, int startTimeSeconds, int audioLenSeconds, boolean isDB) {
         if (fileName == null || "".equals(fileName)) {
             return null;
@@ -106,11 +104,18 @@ public class ACRCloudExtrTool {
     }
 
     private static native void native_init();
+
     private static native byte[] native_create_fingerprint_by_file(String file_name, int start_time_seconds, int audio_len_seconds, boolean is_db_fingerprint);
+
     private static native byte[] native_create_fingerprint_by_filebuffer(byte[] data_buffer, int data_buffer_len, int start_time_seconds, int audio_len_seconds, boolean is_db_fingerprint);
+
     private static native byte[] native_create_fingerprint(byte[] wav_data_buffer, int wav_data_buffer_len, boolean is_db_fingerprint);
+
     private static native byte[] native_decode_audio_by_file(String file_name, int start_time_seconds, int audio_len_seconds);
-    private static native byte[] native_decode_audio_by_filebuffer(byte[]data_buffer, int data_buffer_len, int start_time_seconds, int audio_len_seconds);
+
+    private static native byte[] native_decode_audio_by_filebuffer(byte[] data_buffer, int data_buffer_len, int start_time_seconds, int audio_len_seconds);
+
     private static native void native_set_debug();
+
     private static native String native_get_doc();
 }

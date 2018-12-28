@@ -20,52 +20,65 @@
         android:background="#fcfcfc"
         android:orientation="vertical">
 
-        <android.support.v4.widget.NestedScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <ProgressBar
+                android:id="@+id/progressBar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:visibility="@{viewModel.loading ? View.VISIBLE : View.GONE}" />
 
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="@{viewModel.loading ? View.VISIBLE : View.GONE}" />
+            <EditText
+                android:id="@+id/folder_path_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="folder"
+                android:inputType="textPersonName"
+                android:text="@={viewModel.folderPath}" />
 
-                <EditText
-                    android:id="@+id/folder_path_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="folder"
-                    android:inputType="textPersonName"
-                    android:onClick="@{()->viewModel.toParentFolder()}"
-                    android:text="@={viewModel.folderPath}" />
+            <Button
+                android:id="@+id/rec_folder_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="@drawable/rectangle_black"
+                android:onClick="@{ () -> viewModel.editCurrentFolderNow()}"
+                android:text="@string/edit_folder_now" />
 
-                <Button
-                    android:id="@+id/open_folder_btn"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{ () -> viewModel.loadFolder(viewModel.folderPath)}"
-                    android:text="Open folder" />
+            <Button
+                android:id="@+id/rec_folder_stop_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="@drawable/rectangle_black"
+                android:onClick="@{ () -> viewModel.stopEditCurrentFolderNow()}"
+                android:visibility="@{ viewModel.isEditing ? View.VISIBLE : View.GONE}"
+                android:text="@string/edit_folder_stop_now" />
 
-                <Button
-                    android:id="@+id/rec_folder_btn"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{ () -> viewModel.editFolderNow()}"
-                    android:text="Rec folder" />
+            <ImageButton
+                android:id="@+id/prev_dir_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:background="@android:color/transparent"
+                android:onClick="@{()->viewModel.toParentFolder()}"
+                app:srcCompat="@drawable/ic_prev_dir" />
+
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:items="@{viewModel.songs}" />
+            </android.support.v4.widget.NestedScrollView>
+        </LinearLayout>
 
-            </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
     </RelativeLayout>
 </layout>

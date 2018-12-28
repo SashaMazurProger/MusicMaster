@@ -1,14 +1,12 @@
-
 package com.acrcloud.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ExternalMetadata implements Parcelable
-{
+public class ExternalMetadata implements Parcelable {
 
     @SerializedName("deezer")
     @Expose
@@ -23,7 +21,7 @@ public class ExternalMetadata implements Parcelable
 
 
         @SuppressWarnings({
-            "unchecked"
+                "unchecked"
         })
         public ExternalMetadata createFromParcel(Parcel in) {
             return new ExternalMetadata(in);
@@ -33,8 +31,7 @@ public class ExternalMetadata implements Parcelable
             return (new ExternalMetadata[size]);
         }
 
-    }
-    ;
+    };
 
     protected ExternalMetadata(Parcel in) {
         this.deezer = ((Deezer) in.readValue((Deezer.class.getClassLoader())));
@@ -44,13 +41,11 @@ public class ExternalMetadata implements Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public ExternalMetadata() {
     }
 
     /**
-     * 
      * @param spotify
      * @param youtube
      * @param deezer
@@ -93,7 +88,7 @@ public class ExternalMetadata implements Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

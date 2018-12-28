@@ -29,6 +29,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.acrcloud.utils.CommonUtils;
 import com.acrcloud.utils.NetworkUtils;
@@ -84,16 +85,30 @@ public abstract class BaseActivity<B extends ViewDataBinding, VM extends BaseVie
 
 //    @Override
 //    protected void attachBaseContext(Context newBase) {
-////        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+//        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 //    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-//        performDependencyInjection();
         super.onCreate(savedInstanceState);
         mCompositeDisposable = new CompositeDisposable();
         performDataBinding();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        bindEvents();
+    }
+
+    protected void bindEvents() {
+
+        disposable(getViewModel().getMessage().subscribe(s -> {
+            Toast.makeText(this, (String) s, Toast.LENGTH_LONG).show();
+        }));
+
+    }
+
 
     public B getViewDataBinding() {
         return mViewDataBinding;
@@ -124,15 +139,6 @@ public abstract class BaseActivity<B extends ViewDataBinding, VM extends BaseVie
     public boolean isNetworkConnected() {
         return NetworkUtils.isNetworkConnected(getApplicationContext());
     }
-
-    public void openActivityOnTokenExpire() {
-//        startActivity(LoginActivity.newIntent(this));
-//        finish();
-    }
-
-//    public void performDependencyInjection() {
-//        AndroidInjection.inject(this);
-//    }
 
     @Override
     public void onStop() {

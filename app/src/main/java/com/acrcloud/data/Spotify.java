@@ -1,16 +1,15 @@
-
 package com.acrcloud.data;
 
-import java.util.ArrayList;
-import java.util.List;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Spotify implements Parcelable
-{
+import java.util.ArrayList;
+import java.util.List;
+
+public class Spotify implements Parcelable {
 
     @SerializedName("album")
     @Expose
@@ -25,7 +24,7 @@ public class Spotify implements Parcelable
 
 
         @SuppressWarnings({
-            "unchecked"
+                "unchecked"
         })
         public Spotify createFromParcel(Parcel in) {
             return new Spotify(in);
@@ -35,8 +34,7 @@ public class Spotify implements Parcelable
             return (new Spotify[size]);
         }
 
-    }
-    ;
+    };
 
     protected Spotify(Parcel in) {
         this.album = ((Album_) in.readValue((Album_.class.getClassLoader())));
@@ -46,13 +44,11 @@ public class Spotify implements Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public Spotify() {
     }
 
     /**
-     * 
      * @param artists
      * @param album
      * @param track
@@ -95,7 +91,7 @@ public class Spotify implements Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

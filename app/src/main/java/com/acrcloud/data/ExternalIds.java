@@ -1,14 +1,12 @@
-
 package com.acrcloud.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ExternalIds implements Parcelable
-{
+public class ExternalIds implements Parcelable {
 
     @SerializedName("isrc")
     @Expose
@@ -20,7 +18,7 @@ public class ExternalIds implements Parcelable
 
 
         @SuppressWarnings({
-            "unchecked"
+                "unchecked"
         })
         public ExternalIds createFromParcel(Parcel in) {
             return new ExternalIds(in);
@@ -30,8 +28,7 @@ public class ExternalIds implements Parcelable
             return (new ExternalIds[size]);
         }
 
-    }
-    ;
+    };
 
     protected ExternalIds(Parcel in) {
         this.isrc = ((String) in.readValue((String.class.getClassLoader())));
@@ -40,13 +37,11 @@ public class ExternalIds implements Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public ExternalIds() {
     }
 
     /**
-     * 
      * @param isrc
      * @param upc
      */
@@ -78,7 +73,7 @@ public class ExternalIds implements Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }

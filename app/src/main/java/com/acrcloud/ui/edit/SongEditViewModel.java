@@ -4,15 +4,15 @@ import android.arch.lifecycle.MutableLiveData;
 import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
-import android.os.Handler;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.acrcloud.data.ACRRecognizeResponse;
 import com.acrcloud.data.Music;
-import com.acrcloud.ui.select.SelectMusicViewModel;
+import com.acrcloud.ui.Song;
 import com.acrcloud.ui.base.BaseViewModel;
 import com.acrcloud.utils.AppLogger;
-import com.acrcloud.utils.rx.SchedulerProvider;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -24,18 +24,18 @@ import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.TagField;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import hu.akarnokd.rxjava2.subjects.DispatchWorkSubject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class SongEditViewModel extends BaseViewModel {
+public class SongEditViewModel extends BaseViewModel<MainNavigator> {
 
-    private final MutableLiveData<SelectMusicViewModel.Song> editSong = new MutableLiveData<>();
+    private final MutableLiveData<Song> editSong = new MutableLiveData<>();
 
     private final ObservableField<ACRRecognizeResponse> result = new ObservableField<>();
 
@@ -46,7 +46,7 @@ public class SongEditViewModel extends BaseViewModel {
     private final ObservableField<String> album = new ObservableField<>();
     private final ObservableField<String> title = new ObservableField<>();
     private final ObservableField<String> comment = new ObservableField<>();
-    private final ObservableField<TagField> coverArt = new ObservableField<>();
+    private final ObservableField<Bitmap> coverArt = new ObservableField<Bitmap>();
 
     private final DispatchWorkSubject onApplyEditEvent = DispatchWorkSubject.create(getSchedulerProvider().ui());
 
@@ -73,6 +73,12 @@ public class SongEditViewModel extends BaseViewModel {
         };
         artist.addOnPropertyChangedCallback(fileNameCallback);
         title.addOnPropertyChangedCallback(fileNameCallback);
+
+        onApplyEditEvent.subscribe(o -> {
+            if (getNavigator() != null) {
+                getNavigator().onApplyEditOpenedSong();
+            }
+        });
 
     }
 
@@ -160,7 +166,18 @@ public class SongEditViewModel extends BaseViewModel {
             album.set(tag.getFirst(FieldKey.ALBUM));
             title.set(tag.getFirst(FieldKey.TITLE));
             comment.set(tag.getFirst(FieldKey.COMMENT));
-            coverArt.set(tag.getFirstField(FieldKey.COVER_ART));
+
+//            try {
+//                byte[] clipArtBytes = new byte[0];
+//                if (tag.getFirst(FieldKey.COVER_ART) != null) {
+//                    clipArtBytes = tag.getFirst(FieldKey.COVER_ART).getRawContent();
+//                    Bitmap bitmap = BitmapFactory.decodeByteArray(clipArtBytes, 0, clipArtBytes.length);
+//                    coverArt.set(bitmap);
+//                }
+//            } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();
+//            }
+
 
             String s = tag.getFirst(FieldKey.ARTIST)
                     + tag.getFirst(FieldKey.ALBUM) + "\n"
@@ -175,7 +192,7 @@ public class SongEditViewModel extends BaseViewModel {
         }
     }
 
-    public MutableLiveData<SelectMusicViewModel.Song> getEditSong() {
+    public MutableLiveData<Song> getEditSong() {
         return editSong;
     }
 
@@ -199,7 +216,7 @@ public class SongEditViewModel extends BaseViewModel {
         return comment;
     }
 
-    public ObservableField<TagField> getCoverArt() {
+    public ObservableField<Bitmap> getCoverArt() {
         return coverArt;
     }
 

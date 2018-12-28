@@ -1,8 +1,10 @@
 package com.acrcloud.ui.select;
 
+import com.acrcloud.ui.Song;
+
 public interface SongItemListener {
 
-    void click(SelectMusicViewModel.Song song);
+    void click(Song song);
 
-    void editNow(SelectMusicViewModel.Song song);
+    void editNow(Song song);
 }

@@ -1,14 +1,12 @@
-
 package com.acrcloud.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Youtube implements Parcelable
-{
+public class Youtube implements Parcelable {
 
     @SerializedName("vid")
     @Expose
@@ -17,7 +15,7 @@ public class Youtube implements Parcelable
 
 
         @SuppressWarnings({
-            "unchecked"
+                "unchecked"
         })
         public Youtube createFromParcel(Parcel in) {
             return new Youtube(in);
@@ -27,8 +25,7 @@ public class Youtube implements Parcelable
             return (new Youtube[size]);
         }
 
-    }
-    ;
+    };
 
     protected Youtube(Parcel in) {
         this.vid = ((String) in.readValue((String.class.getClassLoader())));
@@ -36,13 +33,11 @@ public class Youtube implements Parcelable
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public Youtube() {
     }
 
     /**
-     * 
      * @param vid
      */
     public Youtube(String vid) {
@@ -63,7 +58,7 @@ public class Youtube implements Parcelable
     }
 
     public int describeContents() {
-        return  0;
+        return 0;
     }
 
 }
