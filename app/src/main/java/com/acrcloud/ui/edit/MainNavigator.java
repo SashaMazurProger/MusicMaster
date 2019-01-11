@@ -7,4 +7,6 @@ public interface MainNavigator {
     void onApplyEditOpenedSong();
 
     void onItemSongSelected(Song song);
+
+    void openEditMusicScreen();
 }

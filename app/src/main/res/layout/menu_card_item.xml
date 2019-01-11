@@ -26,7 +26,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/card_icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="16dp"
@@ -34,11 +34,11 @@
                 android:src="@{icon}" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/card_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="TextView"
-                android:text="@{title}" />
+                android:text="@{title}"
+                tools:text="TextView" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
