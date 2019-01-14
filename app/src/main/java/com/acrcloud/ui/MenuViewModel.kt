@@ -6,6 +6,6 @@ import com.acrcloud.ui.edit.MainNavigator
 class MenuViewModel: BaseViewModel<MainNavigator>() {
 
     fun editMusicScreen(){
-        navigator.openEditMusicScreen()
+        navigator!!.openEditMusicScreen()
     }
 }

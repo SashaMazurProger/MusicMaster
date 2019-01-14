@@ -2,11 +2,11 @@ package com.acrcloud.ui
 
 
 import android.arch.lifecycle.ViewModelProviders
+import android.databinding.DataBindingComponent
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.acrcloud.ui.base.BaseFragment
 import com.acrcloud.ui.databinding.FragmentMainMenuBinding
 import com.acrcloud.ui.edit.MainNavigator
@@ -17,28 +17,23 @@ import kotlinx.android.synthetic.main.fragment_main_menu.*
  */
 class MainMenuFragment : BaseFragment<FragmentMainMenuBinding, MenuViewModel>() {
 
-    override fun getViewModel(): MenuViewModel {
+    override val viewModel: MenuViewModel
+        get() {
+            val vm = ViewModelProviders.of(this).get(MenuViewModel::class.java)
+            vm.navigator = activity as MainNavigator
+            return vm
+        }
 
-        val vm = ViewModelProviders.of(this).get(MenuViewModel::class.java)
-        vm.navigator = activity as MainNavigator
-        return vm
-    }
 
+    override val bindingVariable: Int
+        get() {
+            return BR.viewModel
+        }
 
-//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-//                              savedInstanceState: Bundle?): View? {
-//        // Inflate the layout for this fragment
-//        val view = inflater.inflate(R.layout.fragment_main_menu, container, false)
-//        return view
-//    }
-
-    override fun getBindingVariable(): Int {
-        return BR.viewModel
-    }
-
-    override fun getLayoutId(): Int {
-        return R.layout.fragment_main_menu
-    }
+    override val layoutId: Int
+        get() {
+            return R.layout.fragment_main_menu
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,4 +56,4 @@ class MainMenuFragment : BaseFragment<FragmentMainMenuBinding, MenuViewModel>() 
         menuCard2.setIcon(R.drawable.ic_player)
         cards_c!!.addView(menuCard2.view)
     }
-}// Required empty public constructor
+}
