@@ -9,4 +9,6 @@ interface MainNavigator {
     fun onItemSongSelected(song: Song)
 
     fun openEditMusicScreen()
+
+    fun openListenMusicScreen()
 }

@@ -27,5 +27,12 @@
         <action
             android:id="@+id/action_mainMenuFragment_to_musicFolderFragment"
             app:destination="@id/musicFolderFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_listenFragment"
+            app:destination="@id/listenFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/listenFragment"
+        android:name="com.acrcloud.ui.listen.ListenFragment"
+        android:label="ListenFragment" />
 </navigation>

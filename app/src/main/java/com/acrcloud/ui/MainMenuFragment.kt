@@ -2,8 +2,6 @@ package com.acrcloud.ui
 
 
 import android.arch.lifecycle.ViewModelProviders
-import android.databinding.DataBindingComponent
-import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
@@ -50,6 +48,7 @@ class MainMenuFragment : BaseFragment<FragmentMainMenuBinding, MenuViewModel>() 
         menuCard1.setTitle("Recognize music")
         menuCard1.setIcon(R.drawable.ic_file)
         cards_c!!.addView(menuCard1.view)
+        menuCard1.view.setOnClickListener { viewModel.listenMusicScreen() }
 
         val menuCard2 = MenuCard(context!!)
         menuCard2.setTitle("Settings")

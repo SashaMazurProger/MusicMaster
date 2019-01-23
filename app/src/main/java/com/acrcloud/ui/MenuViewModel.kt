@@ -8,4 +8,8 @@ class MenuViewModel: BaseViewModel<MainNavigator>() {
     fun editMusicScreen(){
         navigator!!.openEditMusicScreen()
     }
+
+    fun listenMusicScreen() {
+        navigator!!.openListenMusicScreen()
+    }
 }
