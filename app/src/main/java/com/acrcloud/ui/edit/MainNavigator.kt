@@ -1,12 +1,12 @@
 package com.acrcloud.ui.edit
 
-import com.acrcloud.ui.Song
+import com.acrcloud.ui.EditSong
 
 interface MainNavigator {
 
     fun onApplyEditOpenedSong()
 
-    fun onItemSongSelected(song: Song)
+    fun onItemSongSelected(editSong: EditSong)
 
     fun openEditMusicScreen()
 

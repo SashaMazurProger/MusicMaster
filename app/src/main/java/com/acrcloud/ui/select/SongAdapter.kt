@@ -4,7 +4,7 @@ import android.support.annotation.NonNull
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.acrcloud.ui.Song
+import com.acrcloud.ui.EditSong
 import com.acrcloud.ui.databinding.SongItemLayoutBinding
 
 
@@ -16,7 +16,7 @@ class SongAdapter(val viewModel: SelectMusicViewModel) : RecyclerView.Adapter<So
     }
 
 
-    private var songs = ArrayList<Song>()
+    private var songs = ArrayList<EditSong>()
 
     override fun onCreateViewHolder(@NonNull viewGroup: ViewGroup, i: Int): SongHolder {
 
@@ -24,9 +24,9 @@ class SongAdapter(val viewModel: SelectMusicViewModel) : RecyclerView.Adapter<So
         return SongHolder(binding)
     }
 
-    fun setSongs(songs: List<Song>) {
+    fun setSongs(editSongs: List<EditSong>) {
         this.songs.clear()
-        this.songs.addAll(songs)
+        this.songs.addAll(editSongs)
 
     }
 
@@ -34,25 +34,25 @@ class SongAdapter(val viewModel: SelectMusicViewModel) : RecyclerView.Adapter<So
 
     override fun onBindViewHolder(@NonNull viewHolder: SongHolder, i: Int) {
 
-        viewHolder.binding.song = songs.get(i)
+        viewHolder.binding.editSong = songs.get(i)
         if (getItemViewType(i) == SONG_ITEM) {
             viewHolder.binding.listener = object : SongItemListener {
-                override fun click(song: Song) {
-                    viewModel.onItemSelected(song)
+                override fun click(editSong: EditSong) {
+                    viewModel.onItemSelected(editSong)
                 }
 
-                override fun editNow(song: Song) {
-                    viewModel.editSelectedSongNow(song)
+                override fun editNow(editSong: EditSong) {
+                    viewModel.editSelectedSongNow(editSong)
                 }
             }
         } else {
             viewHolder.binding.listener = object : SongItemListener {
-                override fun click(song: Song) {
-                    viewModel.onItemSelected(song)
+                override fun click(editSong: EditSong) {
+                    viewModel.onItemSelected(editSong)
                 }
 
-                override fun editNow(song: Song) {
-                    viewModel.editSelectedFolderNow(song)
+                override fun editNow(editSong: EditSong) {
+                    viewModel.editSelectedFolderNow(editSong)
                 }
             }
         }
@@ -62,7 +62,7 @@ class SongAdapter(val viewModel: SelectMusicViewModel) : RecyclerView.Adapter<So
 
     override fun getItemViewType(position: Int): Int {
         return when (songs[position].type) {
-            Song.TYPE.SONG -> SONG_ITEM
+            EditSong.TYPE.SONG -> SONG_ITEM
             else -> FOLDER_ITEM
         }
     }

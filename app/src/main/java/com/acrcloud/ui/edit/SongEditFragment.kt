@@ -2,15 +2,13 @@ package com.acrcloud.ui.edit
 
 
 import android.arch.lifecycle.ViewModelProviders
-import android.databinding.Observable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
-import android.widget.ImageView
 
 import com.acrcloud.ui.BR
 import com.acrcloud.ui.R
-import com.acrcloud.ui.Song
+import com.acrcloud.ui.EditSong
 import com.acrcloud.ui.base.BaseFragment
 import com.acrcloud.ui.databinding.FragmentSongEditBinding
 
@@ -31,7 +29,7 @@ class SongEditFragment : BaseFragment<FragmentSongEditBinding, SongEditViewModel
         get() {
             val viewModel = ViewModelProviders.of(this).get(SongEditViewModel::class.java)
             viewModel.navigator = activity as MainNavigator?
-            viewModel.editSong.value = arguments!!.getParcelable(Song.KEY)
+            viewModel.editSong.value = arguments!!.getParcelable(EditSong.KEY)
             return viewModel
         }
 

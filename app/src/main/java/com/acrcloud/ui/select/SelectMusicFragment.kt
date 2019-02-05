@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.View
 
 import com.acrcloud.ui.BR
@@ -40,7 +39,6 @@ class SelectMusicFragment : BaseFragment<FragmentMusicFolderBinding, SelectMusic
         listView.layoutManager = LinearLayoutManager(context)
         listView.adapter = SongAdapter(viewModel)
 
-        viewModel.loadFolder()
 
         super.onViewCreated(view, savedInstanceState)
     }
@@ -49,7 +47,7 @@ class SelectMusicFragment : BaseFragment<FragmentMusicFolderBinding, SelectMusic
         super.bindEvents()
 
         disposable(viewModel.itemSongChangedEvent.subscribe { song ->
-            val index = viewModel.songs.indexOf(song)
+            val index = viewModel.files.indexOf(song)
             binding!!.list.adapter!!.notifyItemChanged(index)
         })
 

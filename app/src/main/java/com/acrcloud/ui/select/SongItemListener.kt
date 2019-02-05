@@ -1,10 +1,10 @@
 package com.acrcloud.ui.select
 
-import com.acrcloud.ui.Song
+import com.acrcloud.ui.EditSong
 
 interface SongItemListener {
 
-    fun click(song: Song)
+    fun click(editSong: EditSong)
 
-    fun editNow(song: Song)
+    fun editNow(editSong: EditSong)
 }

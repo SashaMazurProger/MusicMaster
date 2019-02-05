@@ -20,7 +20,7 @@ import android.databinding.BindingAdapter
 import android.databinding.ObservableList
 import android.support.v7.widget.RecyclerView
 
-import com.acrcloud.ui.Song
+import com.acrcloud.ui.EditSong
 import com.acrcloud.ui.select.SongAdapter
 
 /**
@@ -29,8 +29,8 @@ import com.acrcloud.ui.select.SongAdapter
 
 
 @BindingAdapter("items")
-fun list(listView: RecyclerView, songList: ObservableList<Song>) {
-    (listView.adapter as SongAdapter).setSongs(songList)
+fun list(listView: RecyclerView, editSongList: ObservableList<EditSong>) {
+    (listView.adapter as SongAdapter).setSongs(editSongList)
     listView.adapter!!.notifyDataSetChanged()
 }
 

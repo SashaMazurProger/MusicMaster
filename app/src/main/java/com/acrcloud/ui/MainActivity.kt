@@ -78,9 +78,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), MainNav
         navController!!.popBackStack()
     }
 
-    override fun onItemSongSelected(song: Song) {
+    override fun onItemSongSelected(editSong: EditSong) {
         val bundle = Bundle()
-        bundle.putParcelable(Song.KEY, song)
+        bundle.putParcelable(EditSong.KEY, editSong)
         navController!!.navigate(R.id.action_musicFolderFragment_to_songEditFragment, bundle)
     }
 

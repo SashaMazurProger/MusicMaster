@@ -5,28 +5,26 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.os.Environment
 import android.util.Log
-import com.acrcloud.ui.Song
+import com.acrcloud.ui.EditSong
 import com.acrcloud.ui.base.BaseViewModel
 import com.acrcloud.ui.edit.MainNavigator
-import com.acrcloud.utils.SongRenamer
+import com.acrcloud.utils.SongEditor
 import hu.akarnokd.rxjava2.subjects.DispatchWorkSubject
 import io.reactivex.Observable
-import io.reactivex.ObservableSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import java.io.File
 import java.util.concurrent.Executors
 
 class SelectMusicViewModel : BaseViewModel<MainNavigator>() {
 
-    val openSongEvent = DispatchWorkSubject.create<Song>(schedulerProvider.ui())
-    val itemSongChangedEvent = DispatchWorkSubject.create<Song>(schedulerProvider.ui())
+    val openSongEvent = DispatchWorkSubject.create<EditSong>(schedulerProvider.ui())
+    val itemSongChangedEvent = DispatchWorkSubject.create<EditSong>(schedulerProvider.ui())
 
-    val folderPath = ObservableField(Environment.getExternalStorageDirectory().toString())
-    val songs = ObservableArrayList<Song>()
-    val isEditing = ObservableBoolean(false)
+    val folderPath = ObservableField(Environment.getExternalStorageDirectory().path)
+    val files = ObservableArrayList<EditSong>()
+    val isEditingFolder = ObservableBoolean(false)
     private var editingFolderDisposable: Disposable? = null
 
     init {
@@ -36,21 +34,12 @@ class SelectMusicViewModel : BaseViewModel<MainNavigator>() {
                 navigator!!.onItemSongSelected(song)
             }
         }
+
+        loadItems()
     }
 
-    fun loadFolder(path: String) {
-
-
-        if (path == "/") {
-            return
-        }
-
-        this.folderPath.set(path)
-        loadFolder()
-    }
-
-    fun loadFolder() {
-        songs.clear()
+    private fun loadItems() {
+        files.clear()
         if (folderPath.get() != null) {
             val folder = File(folderPath.get())
             if (folder.exists() && folder.listFiles() != null) {
@@ -58,13 +47,14 @@ class SelectMusicViewModel : BaseViewModel<MainNavigator>() {
                     for (file in folder.listFiles()) {
 
                         if (file.isDirectory) {
-                            val song = Song(file.absolutePath, file.name)
-                            song.type = Song.TYPE.FOLDER
-                            songs.add(song)
+                            val song = EditSong(file.absolutePath, file.name)
+                            song.type = EditSong.TYPE.FOLDER
+                            files.add(song)
                         } else if (isMusicFile(file.absolutePath)) {
-                            songs.add(Song(file.absolutePath, file.name))
+                            files.add(EditSong(file.absolutePath, file.name))
                         }
                     }
+                    files.sortBy { it.type }
                 }
             }
         }
@@ -72,14 +62,18 @@ class SelectMusicViewModel : BaseViewModel<MainNavigator>() {
 
     fun toParentFolder() {
         val curFolder = File(folderPath.get())
-
-        //TODO costylik
-        if (curFolder.parent.endsWith("/emulated")) {
-            loadFolder(curFolder.parentFile.parent)
-            return
+        if (curFolder.parentFile != null && curFolder.parentFile.canRead()) {
+            folderPath.set(curFolder.parent)
+            checkAndLoadItems()
         }
+    }
 
-        loadFolder(curFolder.parent)
+    private fun checkAndLoadItems() {
+        val curFolder = File(folderPath.get())
+
+        if (curFolder != null || curFolder.canRead()) {
+            loadItems()
+        }
     }
 
     //mp3, mp4, wav, m4a, aac, amr, ape, flv, flac, ogg, wma, caf, alac
@@ -89,51 +83,54 @@ class SelectMusicViewModel : BaseViewModel<MainNavigator>() {
 
 
     fun stopEditCurrentFolderNow() {
-        if (isEditing.get()) {
+        if (isEditingFolder.get()) {
             if (editingFolderDisposable != null) {
                 editingFolderDisposable!!.dispose()
             }
 
-            isEditing.set(false)
+            isEditingFolder.set(false)
         }
     }
 
     fun editCurrentFolderNow() {
 
-        if (isEditing.get()) {
+        if (isEditingFolder.get() && files.any { it.type == EditSong.TYPE.SONG }) {
             return
         }
 
-        isEditing.set(true)
+        isEditingFolder.set(true)
 
-        val poolExecutor = Executors.newFixedThreadPool(1)
-        val scheduler = Schedulers.from(poolExecutor)
-        editingFolderDisposable = Observable.fromIterable(songs)
-                .filter { song -> song.type == Song.TYPE.SONG }
-                .flatMap({ song: Song ->
-                    dataManager.recognizeSong(song.path)
-                            .subscribeOn(scheduler)
-                            .doOnSubscribe { d -> song.isEditing = true }
-                            .doOnNext { r -> song.isEditing = false }
-                            .map<Song> { result ->
-                                val edited = SongRenamer.editSong(song, result)
+        val poolExecutorSubscribe = Executors.newFixedThreadPool(1)
+        val schedulerSubscribe = Schedulers.from(poolExecutorSubscribe)
+
+        editingFolderDisposable = Observable.fromIterable(files)
+                .filter { song -> song.type == EditSong.TYPE.SONG }
+                .flatMap { editSong: EditSong ->
+                    dataManager.recognizeSong(editSong.path)
+                            .subscribeOn(schedulerSubscribe)
+                            .doOnSubscribe { d -> editSong.isEditing = true }
+                            .doOnNext { r -> editSong.isEditing = false }
+                            .map<EditSong> { result ->
+                                val edited = SongEditor.editSong(editSong, result)
 
                                 if (edited != null) {
 
-                                    updateSongInLists(edited, song)
+                                    updateSongInLists(edited, editSong)
 
-                                    if (songs.indexOf(song) == songs.size - 1) {
-                                        isEditing.set(false)
+                                    //last song
+                                    if (files.indexOf(editSong) == files.size - 1) {
+                                        isEditingFolder.set(false)
                                     }
+
                                     edited
                                 }
 
-                                song
+                                editSong
 
                             }
-                } as Function<Song, ObservableSource<Song>>)
+                }
                 .doOnDispose {
-                    for (item in songs) {
+                    for (item in files) {
                         item.isEditing = false
                     }
                 }
@@ -141,55 +138,52 @@ class SelectMusicViewModel : BaseViewModel<MainNavigator>() {
                         { throwable -> Log.e("error", "renameAll: ", throwable) })
     }
 
-    fun onItemSelected(song: Song) {
-        if (song.type == Song.TYPE.SONG) {
-            openSongEvent.onNext(song)
+    fun onItemSelected(editSong: EditSong) {
+        if (editSong.type == EditSong.TYPE.SONG) {
+            openSongEvent.onNext(editSong)
         } else {
 
-            var path = song.path
-
-            //TODO costylik
-            if (path!!.endsWith("/emulated")) {
-                path = "$path/0"
+            var folder = editSong.path
+            if (folder != null) {
+                folderPath.set(folder)
+                checkAndLoadItems()
             }
-
-            loadFolder(path)
         }
     }
 
-    fun editSelectedSongNow(song: Song) {
+    fun editSelectedSongNow(editSong: EditSong) {
 
-        dataManager.recognizeSong(song.path)
+        dataManager.recognizeSong(editSong.path)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { d -> song.isEditing = true }
-                .doOnNext { r -> song.isEditing = false }
+                .doOnSubscribe { d -> editSong.isEditing = true }
+                .doOnNext { r -> editSong.isEditing = false }
                 .subscribe({ result ->
-                    val edited = SongRenamer.editSong(song, result)
+                    val edited = SongEditor.editSong(editSong, result)
 
                     if (edited != null) {
-                        updateSongInLists(edited, song)
+                        updateSongInLists(edited, editSong)
                     }
 
                 }, { throwable -> Log.e("error", "rename: ", throwable) })
 
     }
 
-    private fun updateSongInLists(newSong: Song, oldSong: Song) {
+    private fun updateSongInLists(newEditSong: EditSong, oldEditSong: EditSong) {
         var index = -1
 
-        for (s in songs) {
-            if (s.path == oldSong.path) {
-                index = songs.indexOf(s)
+        for (s in files) {
+            if (s.path == oldEditSong.path) {
+                index = files.indexOf(s)
                 break
             }
         }
         if (index > -1) {
-            songs[index] = newSong
+            files[index] = newEditSong
         }
     }
 
-    fun editSelectedFolderNow(song: Song) {
+    fun editSelectedFolderNow(editSong: EditSong) {
 
     }
 }

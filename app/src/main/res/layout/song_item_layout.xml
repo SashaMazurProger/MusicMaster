@@ -8,11 +8,11 @@
 
         <import type="android.view.View" />
 
-        <import type="com.acrcloud.ui.Song.TYPE" />
+        <import type="com.acrcloud.ui.EditSong.TYPE" />
 
         <variable
-            name="song"
-            type="com.acrcloud.ui.Song" />
+            name="editSong"
+            type="com.acrcloud.ui.EditSong" />
 
         <variable
             name="listener"
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/md_white_1000"
-            android:onClick="@{ () -> listener.click(song)}"
+            android:onClick="@{ () -> listener.click(editSong)}"
             android:orientation="horizontal"
             android:padding="16dp">
 
@@ -40,7 +40,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentBottom="true"
-                android:src="@{song.getType == TYPE.SONG ? @drawable/ic_music_note_black_24dp : @drawable/ic_folder_black_24dp}" />
+                android:src="@{editSong.getType == TYPE.SONG ? @drawable/ic_music_note_black_24dp : @drawable/ic_folder_black_24dp}" />
 
             <TextView
                 android:id="@+id/card_title"
@@ -58,7 +58,7 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:text="@{song.title}"
+                android:text="@{editSong.title}"
                 android:textColor="@color/md_black_1000"
                 android:textSize="18sp"
                 tools:text="texttexttexttexttexttexttexttexttexttext" />
@@ -72,16 +72,16 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:visibility="@{ song.getType == TYPE.SONG  ? View.VISIBLE : View.GONE}">
+                android:visibility="@{ editSong.getType == TYPE.SONG  ? View.VISIBLE : View.GONE}">
 
                 <ImageButton
                     android:id="@+id/imageButton"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@color/md_white_1000"
-                    android:onClick="@{()-> listener.editNow(song)}"
+                    android:onClick="@{()-> listener.editNow(editSong)}"
                     android:src="@drawable/ic_edit_black_24dp"
-                    android:visibility="@{ !song.isEditing ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{ !editSong.isEditing ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -91,7 +91,7 @@
                     style="?android:attr/progressBarStyle"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:visibility="@{ song.isEditing ? View.VISIBLE : View.GONE}" />
+                    android:visibility="@{ editSong.isEditing ? View.VISIBLE : View.GONE}" />
 
             </FrameLayout>
 

@@ -5,7 +5,7 @@ import android.databinding.Bindable
 import android.os.Parcel
 import android.os.Parcelable
 
-class Song : BaseObservable, Parcelable {
+class EditSong : BaseObservable, Parcelable {
 
     var type = TYPE.SONG
     var title: String? = null
@@ -57,12 +57,12 @@ class Song : BaseObservable, Parcelable {
         val KEY = "song"
 
         @JvmField
-        val CREATOR: Parcelable.Creator<Song> = object : Parcelable.Creator<Song> {
-            override fun createFromParcel(`in`: Parcel): Song {
-                return Song(`in`)
+        val CREATOR: Parcelable.Creator<EditSong> = object : Parcelable.Creator<EditSong> {
+            override fun createFromParcel(`in`: Parcel): EditSong {
+                return EditSong(`in`)
             }
 
-            override fun newArray(size: Int): Array<Song?> {
+            override fun newArray(size: Int): Array<EditSong?> {
                 return arrayOfNulls(size)
             }
         }

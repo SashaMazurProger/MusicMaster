@@ -7,7 +7,7 @@ import android.databinding.ObservableField
 import android.graphics.Bitmap
 import android.util.Log
 import com.acrcloud.data.ACRRecognizeResponse
-import com.acrcloud.ui.Song
+import com.acrcloud.ui.EditSong
 import com.acrcloud.ui.base.BaseViewModel
 import com.acrcloud.utils.AppLogger
 import hu.akarnokd.rxjava2.subjects.DispatchWorkSubject
@@ -27,7 +27,7 @@ import java.io.IOException
 
 class SongEditViewModel : BaseViewModel<MainNavigator>() {
 
-    val editSong = MutableLiveData<Song>()
+    val editSong = MutableLiveData<EditSong>()
 
     val result = ObservableField<ACRRecognizeResponse>()
 

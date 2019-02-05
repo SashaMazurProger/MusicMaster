@@ -2,24 +2,22 @@ package com.acrcloud.utils
 
 import com.acrcloud.data.ACRRecognizeResponse
 import com.acrcloud.data.Music
-import com.acrcloud.ui.Song
+import com.acrcloud.ui.EditSong
 
-import org.jaudiotagger.audio.AudioFile
 import org.jaudiotagger.audio.AudioFileIO
 import org.jaudiotagger.audio.exceptions.CannotReadException
 import org.jaudiotagger.audio.exceptions.CannotWriteException
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException
 import org.jaudiotagger.tag.FieldKey
-import org.jaudiotagger.tag.Tag
 import org.jaudiotagger.tag.TagException
 
 import java.io.File
 import java.io.IOException
 
-object SongRenamer {
+object SongEditor {
 
-    fun editSong(song: Song, recognizeResponse: ACRRecognizeResponse?): Song? {
+    fun editSong(editSong: EditSong, recognizeResponse: ACRRecognizeResponse?): EditSong? {
         var music: Music? = null
 
         if (recognizeResponse != null
@@ -33,7 +31,7 @@ object SongRenamer {
         if (music != null) {
 
             try {
-                val audioFile = AudioFileIO.read(File(song.path))
+                val audioFile = AudioFileIO.read(File(editSong.path))
 
                 if (audioFile != null) {
                     val tag = audioFile.tagOrCreateAndSetDefault
@@ -44,14 +42,14 @@ object SongRenamer {
                     audioFile.commit()
 
                     val newFileName = music.artists[0].name + " - " + music.title
-                    val file = File(song.path)
+                    val file = File(editSong.path)
                     val newName = file.parent + "/" + newFileName + CommonUtils.getFileExtension(file)
                     val fileD = File(newName)
                     file.renameTo(fileD)
-                    song.title = fileD.name
-                    song.path = fileD.path
+                    editSong.title = fileD.name
+                    editSong.path = fileD.path
 
-                    return song
+                    return editSong
                 }
             } catch (e: CannotReadException) {
                 e.printStackTrace()
